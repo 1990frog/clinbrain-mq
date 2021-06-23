@@ -56,7 +56,8 @@ public class XxlMqClientFactory  {
 
 
         // start BrokerService
-        startBrokerService();
+        //startBrokerService();
+        initBrokerService();
 
         // start consumer
         startConsumer();
@@ -121,6 +122,85 @@ public class XxlMqClientFactory  {
         callbackMessageQueue.add(mqMessage);
     }
 
+    public void initBrokerService() {
+        // init XxlRpcInvokerFactory
+        xxlRpcInvokerFactory = new XxlRpcInvokerFactory(XxlRpcAdminRegister.class, new HashMap<String, String>(){{
+            put(XxlRpcAdminRegister.ADMIN_ADDRESS, adminAddress);
+            put(XxlRpcAdminRegister.ACCESS_TOKEN, accessToken);
+        }});
+        try {
+            xxlRpcInvokerFactory.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // init ConsumerRegistryHelper
+        XxlRpcAdminRegister commonServiceRegistry = (XxlRpcAdminRegister) xxlRpcInvokerFactory.getRegister();
+        consumerRegistryHelper = new ConsumerRegistryHelper(commonServiceRegistry);
+
+        // init IXxlMqBroker
+        /*xxlMqBroker = (IXxlMqBroker) new XxlRpcReferenceBean(
+                NetEnum.NETTY,
+                Hessian1Serializer.getSerializer(),
+                CallType.SYNC,
+                LoadBalance.ROUND,
+                IXxlMqBroker.class,
+                null,
+                10000,
+                null,
+                null,
+                null,
+                xxlRpcInvokerFactory).getObject();*/
+        try {
+            final XxlRpcReferenceBean xxlRpcReferenceBean = new XxlRpcReferenceBean();
+            xxlRpcReferenceBean.setIface(IXxlMqBroker.class);
+            xxlRpcReferenceBean.setInvokerFactory(xxlRpcInvokerFactory);
+            xxlMqBroker = (IXxlMqBroker) xxlRpcReferenceBean.getObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            clientFactoryThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    while (!XxlMqClientFactory.clientFactoryPoolStoped) {
+                        try {
+                            XxlMqMessage message = callbackMessageQueue.take();
+                            if (message != null) {
+                                // load
+                                List<XxlMqMessage> messageList = new ArrayList<>();
+                                messageList.add(message);
+
+                                List<XxlMqMessage> otherMessageList = new ArrayList<>();
+                                int drainToNum = callbackMessageQueue.drainTo(otherMessageList, 100);
+                                if (drainToNum > 0) {
+                                    messageList.addAll(otherMessageList);
+                                }
+
+                                // callback
+                                xxlMqBroker.callbackMessages(messageList);
+                            }
+                        } catch (Exception e) {
+                            if (!XxlMqClientFactory.clientFactoryPoolStoped) {
+                                logger.error(e.getMessage(), e);
+                            }
+                        }
+                    }
+
+                    // finally total
+                    List<XxlMqMessage> otherMessageList = new ArrayList<>();
+                    int drainToNum = callbackMessageQueue.drainTo(otherMessageList);
+                    if (drainToNum> 0) {
+                        xxlMqBroker.callbackMessages(otherMessageList);
+                    }
+
+                }
+            });
+        }
+
+    }
     public void startBrokerService() {
         // init XxlRpcInvokerFactory
         xxlRpcInvokerFactory = new XxlRpcInvokerFactory(XxlRpcAdminRegister.class, new HashMap<String, String>(){{

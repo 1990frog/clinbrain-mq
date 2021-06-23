@@ -57,6 +57,30 @@ public class XxlMqSpringClientFactory implements ApplicationContextAware, Dispos
         xxlMqClientFactory.init();
     }
 
+    public void init(ApplicationContext applicationContext) {
+        // load consumer from spring
+        List<IMqConsumer> consumerList = new ArrayList<>();
+
+        Map<String, Object> serviceMap = applicationContext.getBeansWithAnnotation(MqConsumer.class);
+        if (serviceMap!=null && serviceMap.size()>0) {
+            for (Object serviceBean : serviceMap.values()) {
+                if (serviceBean instanceof IMqConsumer) {
+                    consumerList.add((IMqConsumer) serviceBean);
+                }
+            }
+        }
+
+        // init
+        xxlMqClientFactory = new XxlMqClientFactory();
+
+        xxlMqClientFactory.setAdminAddress(adminAddress);
+        xxlMqClientFactory.setAccessToken(accessToken);
+        xxlMqClientFactory.setConsumerList(consumerList);
+
+        xxlMqClientFactory.init();
+
+    }
+
     @Override
     public void destroy() throws Exception {
         xxlMqClientFactory.destroy();

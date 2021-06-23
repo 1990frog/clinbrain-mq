@@ -18,6 +18,9 @@ public class XxlMqFramelessApplication {
 
     public static void main(String[] args) throws Exception {
 
+        XxlMqProducer.produce(new XxlMqMessage("topic_1", "test msg data"));
+
+        /*
         // consumer list
         List<IMqConsumer> consumerList = new ArrayList<>();
         consumerList.add(new Demo2MqComsumer());
@@ -27,14 +30,14 @@ public class XxlMqFramelessApplication {
         XxlMqConf.getInstance().start(consumerList);
 
         // producer
-        XxlMqProducer.produce(new XxlMqMessage("topic_2", "test msg data"));
+        XxlMqProducer.produce(new XxlMqMessage("topic_1", "test msg data"));
 
         while (!Thread.currentThread().isInterrupted()) {
             TimeUnit.HOURS.sleep(1);
         }
 
         // stop
-        XxlMqConf.getInstance().stop();
+        XxlMqConf.getInstance().stop();*/
 
     }
 
