@@ -167,6 +167,46 @@ public class XxlMqClientFactory  {
 
                     while (!XxlMqClientFactory.clientFactoryPoolStoped) {
                         try {
+                            XxlMqMessage message = newMessageQueue.take();
+                            if (message != null) {
+                                // load
+                                List<XxlMqMessage> messageList = new ArrayList<>();
+                                messageList.add(message);
+
+                                List<XxlMqMessage> otherMessageList = new ArrayList<>();
+                                int drainToNum = newMessageQueue.drainTo(otherMessageList, 100);
+                                if (drainToNum > 0) {
+                                    messageList.addAll(otherMessageList);
+                                }
+
+                                // save
+                                xxlMqBroker.addMessages(messageList);
+                            }
+                        } catch (Exception e) {
+                            if (!XxlMqClientFactory.clientFactoryPoolStoped) {
+                                logger.error(e.getMessage(), e);
+                            }
+                        }
+                    }
+
+                    // finally total
+                    List<XxlMqMessage> otherMessageList = new ArrayList<>();
+                    int drainToNum = newMessageQueue.drainTo(otherMessageList);
+                    if (drainToNum> 0) {
+                        xxlMqBroker.addMessages(otherMessageList);
+                    }
+
+                }
+            });
+        }
+
+        for (int i = 0; i < 3; i++) {
+            clientFactoryThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    while (!XxlMqClientFactory.clientFactoryPoolStoped) {
+                        try {
                             XxlMqMessage message = callbackMessageQueue.take();
                             if (message != null) {
                                 // load

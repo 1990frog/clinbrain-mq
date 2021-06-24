@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 /**
  * Created by xuxueli on 16/8/28.
  */
-@MqConsumer(topic = "topic_1")
-@Service
+//@MqConsumer(topic = "topic_1")
+//@Service
 public class DemoAMqComsumer implements IMqConsumer {
     private Logger logger = LoggerFactory.getLogger(DemoAMqComsumer.class);
 
