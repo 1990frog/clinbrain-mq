@@ -9,10 +9,8 @@
 
 	<modules>
 		<module>clinbrain-mq-admin</module>
-
-		<module>xxl-mq-client</module>
-		<module>xxl-mq-samples</module>
-	</modules>
+        <module>clinbrain-mq-common</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

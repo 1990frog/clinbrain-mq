@@ -1,6 +1,6 @@
 package com.clinbrain.mq.admin.consummer.rabbitmq;
 
-import com.clinbrain.cloud.mq.common.config.rabbitmq.QueueConfig;
+import com.clinbrain.mq.common.config.rabbitmq.QueueConfig;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
