@@ -2,6 +2,14 @@ server:
   port: 7101
   servlet:
     context-path: /mq/admin
+  tomcat:
+    uri-encoding: UTF-8
+    #shiro 报错修改的地方
+    max-connections: 200000
+    max-http-form-post-size: 9000000
+    threads:
+      max: 128
+      min-spare: 5
 spring:
   profiles:
     active: dev
@@ -15,3 +23,5 @@ spring:
         server-addr: 192.168.0.112:8848
         group: DEFAULT_GROUP
         file-extension: yml
+
+
