@@ -1,9 +1,9 @@
 package com.clinbrain.mq.admin.common.quartz;
 
-import com.alibaba.nacos.common.utils.StringUtils;
 import com.clinbrain.mq.admin.model.auto.SysQuartzJob;
 import com.clinbrain.mq.admin.model.auto.SysQuartzJobExample;
 import com.clinbrain.mq.admin.service.SysQuartzJobService;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.matchers.GroupMatcher;
