@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.clinbrain.mq.admin.mapper.auto.GeneratorMapper">
-	<resultMap id="BaseResultMap" type="com.clinbrain.mq.admin.model.custom.TsysTables" >
+<mapper namespace="com.clinbrain.mq.mapper.auto.GeneratorMapper">
+	<resultMap id="BaseResultMap" type="com.clinbrain.mq.model.custom.TsysTables" >
 	    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
 	    <result column="engine" property="engine" jdbcType="VARCHAR" />
 	    <result column="table_comment" property="tableComment" jdbcType="VARCHAR" />
 	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   	</resultMap>
   	
-  	<resultMap id="BaseResultMap2" type="com.clinbrain.mq.admin.model.custom.autocode.BeanColumn" >
+  	<resultMap id="BaseResultMap2" type="com.clinbrain.mq.model.custom.autocode.BeanColumn" >
 	    <result column="table_catalog" property="table_catalog" jdbcType="VARCHAR" />
 	    <result column="table_schema" property="table_schema" jdbcType="VARCHAR" />
 	    <result column="table_name" property="table_name" jdbcType="VARCHAR" />
