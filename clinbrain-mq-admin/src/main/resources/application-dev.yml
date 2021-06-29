@@ -60,6 +60,13 @@ spring:
     username: clinbrain
     password: clinbrain
     virtualHost: /
+    # 消费端开启消息确认
+    listener:
+      simple:
+        acknowledge-mode: manual
+      direct:
+        acknowledge-mode: manual
+
 
 #mysql 8.0
 
