@@ -1,8 +1,7 @@
-package com.clinbrain.mq.common.config.rabbitmq;
+package com.clinbrain.mq.common.rabbitmq;
 
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
