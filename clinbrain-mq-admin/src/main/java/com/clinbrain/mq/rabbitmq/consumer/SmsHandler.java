@@ -13,14 +13,16 @@ import java.io.IOException;
 @Component
 public class SmsHandler {
 
-    @RabbitListener(queues = {QueueConfig.QUEUE_SMS_INFORM})
+    @RabbitListener(queues = {QueueConfig.CLINBRAIN_SMS_DEFAULT_QUEUE})
     public void receiveSms(Message message, Channel channel) throws IOException {
         try {
             byte[] body = message.getBody();
             String msg = new String(body,"utf-8");
+            log.info("queue sms inform receive msg={}",msg);
+
+
 
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
-            log.info("queue sms inform receive msg={}",msg);
         } catch (Exception e) {
             if (message.getMessageProperties().getRedelivered()) {
                 log.error("消息已重复处理失败,拒绝再次接收,error msg={}",e.getMessage());

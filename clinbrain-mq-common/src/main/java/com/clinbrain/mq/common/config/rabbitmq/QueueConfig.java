@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QueueConfig {
 
-    public static final String QUEUE_SMS_INFORM = "queue.sms.inform";
-    public static final String QUEUE_EMAIL_INFORM = "queue.email.inform";
+    public static final String CLINBRAIN_SMS_DEFAULT_QUEUE = "clinbrain.sms.default.queue";
+    public static final String CLINBRAIN_EMAIL_DEFAULT_QUEUE = "clinbrain.email.default.queue";
 
-    @Bean
-    public Queue queueSmsInform(){
-        return new Queue(QUEUE_SMS_INFORM);
+    @Bean(name = "clinbrain_sms_default_queue")
+    public Queue clinbrainSmsDefaultQueue(){
+        return new Queue(CLINBRAIN_SMS_DEFAULT_QUEUE);
     }
 
-    @Bean
-    public Queue queueEmailInform(){
-        return new Queue(QUEUE_EMAIL_INFORM);
+    @Bean(name = "clinbrain_email_default_queue")
+    public Queue clinbrainEmailDefaultQueue(){
+        return new Queue(CLINBRAIN_EMAIL_DEFAULT_QUEUE);
     }
 
 
