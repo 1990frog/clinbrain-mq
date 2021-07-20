@@ -14,19 +14,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BindingsConfig {
 
-    public static final String BINGDINGS_KEY_SMS_INFORM = "inform.*.sms.#";
-    public static final String BINGDINGS_KEY_EMAIL_INFORM = "inform.*.email.#";
+    public static final String INFORM_SMS_DEFAULT = "inform.sms.default";
+    public static final String INFORM_EMAIL_DEFAULT = "inform.email.default";
 
     @Bean
-    public Binding bindingQueueSmsInform(@Qualifier("queueSmsInform") Queue queue,
-                                              @Qualifier("exchangeTopicsInform") Exchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with(BINGDINGS_KEY_SMS_INFORM).noargs();
+    public Binding bindingSms(@Qualifier("clinbrain_sms_default_queue") Queue queue,
+                                              @Qualifier("clinbrain_amq_sms_direct") Exchange exchange){
+        return BindingBuilder.bind(queue).to(exchange).with(INFORM_SMS_DEFAULT).noargs();
     }
 
     @Bean
-    public Binding bindingQueueInform(@Qualifier("queueEmailInform") Queue queue,
-                                              @Qualifier("exchangeTopicsInform") Exchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with(BINGDINGS_KEY_EMAIL_INFORM).noargs();
+    public Binding bindingEmail(@Qualifier("clinbrain_email_default_queue") Queue queue,
+                                              @Qualifier("clinbrain_amq_email_direct") Exchange exchange){
+        return BindingBuilder.bind(queue).to(exchange).with(INFORM_EMAIL_DEFAULT).noargs();
     }
 
 
