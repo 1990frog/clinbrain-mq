@@ -1,4 +1,4 @@
-package com.clinbrain.mq.common.config.rabbitmq;
+package com.clinbrain.mq.common.rabbitmq;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
