@@ -1,9 +1,9 @@
 package com.clinbrain.mq.client.producer;
 
-
-import com.clinbrain.mq.common.config.rabbitmq.ExchangeConfig;
-import com.rabbitmq.client.*;
-
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 
 public class Producer {
 
@@ -24,8 +24,8 @@ public class Producer {
         //消息内容
         String msg = " hello world! ";
 
-        channel.basicPublish(ExchangeConfig.EXCHANGE_TOPICS_INFORM,
-                "inform.warn.sms.db" ,
+        channel.basicPublish("clinbrain.amq.sms.direct",
+                "inform.sms.default" ,
                 MessageProperties.PERSISTENT_TEXT_PLAIN,
                 msg.getBytes());
 
