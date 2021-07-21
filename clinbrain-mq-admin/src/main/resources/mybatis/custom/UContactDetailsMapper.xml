@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clinbrain.mq.mapper.custom.UContactDetailsMapper">
+    <resultMap id="BaseResultMap" type="com.clinbrain.mq.model.custom.UContactDetails">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="contact_id" jdbcType="INTEGER" property="contactId" />
+        <result column="contact_type" jdbcType="VARCHAR" property="contactType" />
+        <result column="contact_value" jdbcType="VARCHAR" property="contactValue" />
+        <result column="is_default" jdbcType="INTEGER" property="isDefault" />
+        <result column="check_default" jdbcType="VARCHAR" property="checkDefault" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+
+    <select id="selectListByUsers" resultMap="BaseResultMap">
+        select *
+        from u_contact_details
+        where contact_id in
+        <foreach collection="users" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="contactType != null and contactType!=''" >
+            and  contact_type= #{contactType}
+        </if>
+    </select>
+
+    <select id="selectListByGroups" resultMap="BaseResultMap">
+        select ucd.*
+        from u_contact_details ucd
+        inner join u_contact uc on uc.id = ucd.contact_id
+        inner join u_contact_group ucg on ucg.contact_id = ucd.contact_id
+        where ucg.group_id in
+        <foreach collection="groups" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="contactType != null and contactType!=''" >
+            and  ucd.contact_type= #{contactType}
+        </if>
+    </select>
+
+
+
+
+</mapper>
