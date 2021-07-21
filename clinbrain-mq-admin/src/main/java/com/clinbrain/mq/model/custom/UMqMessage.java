@@ -1,9 +1,13 @@
 package com.clinbrain.mq.model.custom;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder
 @Data
 public class UMqMessage {
     private Long id;

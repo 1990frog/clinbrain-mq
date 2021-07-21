@@ -31,16 +31,7 @@ public class EmailHandler {
     @Autowired
     private UContactDetailsMapper uContactDetailsMapper;
 
-    @RabbitListener(
-            bindings =@QueueBinding(
-                value = @Queue(value = QueueConfig.CLINBRAIN_EMAIL_DEFAULT_QUEUE,
-                        durable = "false",
-                        autoDelete = "true"
-                ),
-            exchange = @Exchange(value = ExchangeConfig.CLINBRAIN_AMQ_EMAIL_DIRECT),
-            key = BindingsConfig.INFORM_EMAIL_DEFAULT),
-            ackMode = "MANUAL",
-            concurrency = "2")
+    @RabbitListener(queues = {QueueConfig.CLINBRAIN_EMAIL_DEFAULT_QUEUE})
     public void receiveEmail(Message message, Channel channel) throws IOException {
         try {
             byte[] body = message.getBody();
