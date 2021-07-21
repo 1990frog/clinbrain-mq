@@ -118,6 +118,7 @@ public class SmsService {
         paramMap.put("phoneNumbers",phoneNumbers);
         paramMap.put("templateCode",template.getTemplateCode());
         paramMap.put("templateParams",templateParams);
+        paramMap.put("uMqMessage",uMqMessage);
         String jsonString = JSON.toJSONString(paramMap);
         //发送消息到MQ
         rabbitTemplate.convertAndSend(ExchangeConfig.CLINBRAIN_AMQ_SMS_DIRECT,
