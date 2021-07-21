@@ -69,10 +69,10 @@ spring:
 
   # 邮件服务器信息
   mail:
-    host: smtp.qq.com
-    username: 414757035@qq.com
-    password: ivhiqxzfasjbbjhf
-    port: 587
+    host: smtp.qiye.163.com
+    username: liaopan@clinbrain.com
+    password: n5NB565f
+    #port: 587
     default-encoding: UTF-8
     # 配置SSL 加密工厂
     properties:

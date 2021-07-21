@@ -64,6 +64,8 @@ public class ShiroFilterMapFactory {
 
 		//短信暂时放开
 		filterChainDefinitionMap.put("/sms/**", "anon");
+		filterChainDefinitionMap.put("/email/**", "anon");
+
 
 		// 对所有页面进行认证
 		filterChainDefinitionMap.put("/**", "user");
