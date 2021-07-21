@@ -22,7 +22,10 @@
             AND c.enabled = '1'
             INNER JOIN u_contact_details d ON c.id = d.contact_id
         WHERE
-            a.id IN (#{groupId})
+            a.id IN
+            <foreach collection="groupId" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
         AND d.contact_type = 'PHONE'
     </select>
 

@@ -82,6 +82,13 @@ spring:
         #开启 DEBUG 模式
         debug: true
 
+#阿里云短信服务配置
+aliyun-sms:
+  accessKeyId: xxx
+  secret: xxx
+  signName: xxx
+
+
 
 #mysql 8.0
 
