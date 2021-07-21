@@ -88,6 +88,18 @@ aliyun-sms:
   secret: xxx
   signName: xxx
 
+#企瑞云短信参数配置
+qiruiyun-sms:
+  url: http://api.qirui.com:7891/mt
+  dc: 8
+  un: 2317600010
+  pw: f5c8fc6254c03f44fffe
+  sm: 【clinbrain】
+  da: 13162978297
+  tf: 3
+  rf: 2
+  rd: 0
+
 
 #mysql 8.0
 
