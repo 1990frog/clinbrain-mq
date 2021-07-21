@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clinbrain.mq.mapper.custom.UGroupsDao">
+
+    <resultMap id="getContactListRM" type="com.clinbrain.mq.model.custom.sms.ContactVo">
+        <result column="contact_name" property="contactName"></result>
+        <result column="nickname" property="nickname"></result>
+        <result column="contact_type" property="contactType"></result>
+        <result column="contact_value" property="contactValue"></result>
+    </resultMap>
+
+    <select id="getContactList" resultMap="getContactListRM">
+        SELECT
+            c.contact_name,
+            c.nickname,
+            d.contact_type,
+            d.contact_value
+        FROM
+            u_groups a
+            INNER JOIN u_contact_group b ON a.id = b.group_id
+            INNER JOIN u_contact c ON b.contact_id = c.id
+            AND c.enabled = '1'
+            INNER JOIN u_contact_details d ON c.id = d.contact_id
+        WHERE
+            a.id IN (#{groupId})
+        AND d.contact_type = 'PHONE'
+    </select>
+
+</mapper>
