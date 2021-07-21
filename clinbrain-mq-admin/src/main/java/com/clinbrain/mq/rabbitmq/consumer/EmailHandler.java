@@ -16,6 +16,8 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,6 +28,8 @@ import java.util.List;
 @Component
 public class EmailHandler {
 
+    @Autowired
+    private JavaMailSender javaMailSender;
     @Autowired
     private UMqMessageMapper uMqMessageMapper;
     @Autowired
@@ -43,13 +47,26 @@ public class EmailHandler {
             concurrency = "2")
     public void receiveEmail(Message message, Channel channel) throws IOException {
         try {
-            byte[] body = message.getBody();
-            String emailStr = new String(body, "utf-8");
+            String emailStr = new String(message.getBody(), "utf-8");
             log.info("queue email inform receive msg={}",emailStr);
             MessageModel model = new ObjectMapper().readValue(emailStr, MessageModel.class);
             List<UMqMessage> uMqMessages = uMqMessageMapper.selectListByIds(model.getUMqMessageIds());
             // 处理邮件消息
-
+            // 构建一个邮件对象
+            SimpleMailMessage msg = new SimpleMailMessage();
+            // 设置邮件主题
+            msg.setSubject("这是一封测试邮件");
+            // 设置邮件发送者，这个跟application.yml中设置的要一致
+            msg.setFrom("hehehe");
+            // 设置邮件接收者，可以有多个接收者，中间用逗号隔开，以下类似
+            // message.setTo("10*****16@qq.com","12****32*qq.com");
+            msg.setTo("hexun1203@foxmail.com");
+            // 设置邮件发送日期
+            msg.setSentDate(new Date());
+            // 设置邮件的正文
+            msg.setText("这是测试邮件的正文");
+            // 发送邮件
+            javaMailSender.send(msg);
 
             uMqMessages.forEach(item ->{
                 item.setLog("消息处理成功");

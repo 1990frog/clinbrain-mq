@@ -67,6 +67,21 @@ spring:
       direct:
         acknowledge-mode: manual
 
+  # 邮件服务器信息
+  mail:
+    host: smtp.qq.com
+    username: 414757035@qq.com
+    password: ivhiqxzfasjbbjhf
+    port: 587
+    default-encoding: UTF-8
+    # 配置SSL 加密工厂
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        #开启 DEBUG 模式
+        debug: true
+
 
 #mysql 8.0
 

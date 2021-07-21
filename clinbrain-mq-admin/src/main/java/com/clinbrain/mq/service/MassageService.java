@@ -19,6 +19,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,19 +71,18 @@ public class MassageService {
         }
 
         uMqMessageMapper.insertSelective(uMqMessage);
-        List<UMqMessage> insertList = uMqMessageMapper.selectList(uMqMessage);
         // 发送消息
         try {
             rabbitTemplate.convertAndSend(ExchangeConfig.CLINBRAIN_AMQ_EMAIL_DIRECT,
                     BindingsConfig.INFORM_EMAIL_DEFAULT,
-                    new MessageModel(insertList.stream().map(UMqMessage::getId).collect(Collectors.toList())));
+                    new ObjectMapper().writeValueAsString(
+                            new MessageModel(Arrays.asList(uMqMessage.getId()))));
         } catch (AmqpException e) {
             log.error("消息发送失败:[{}]",e.getMessage());
-            for(UMqMessage item : insertList){
-                item.setUpdateTime(new Date());
-                item.setLog("消息发送失败");
-                uMqMessageMapper.updateById(item);
-            }
+            uMqMessage.setUpdateTime(new Date());
+            uMqMessage.setLog("消息发送失败");
+            uMqMessage.setStatus("发送失败");
+            uMqMessageMapper.updateById(uMqMessage);
             e.printStackTrace();
         }
     }
@@ -123,20 +123,18 @@ public class MassageService {
             uMqMessage.setAssignTo(String.join(",",smsMessage.getAssign()));
         }
         uMqMessageMapper.insertSelective(uMqMessage);
-        List<UMqMessage> insertList = uMqMessageMapper.selectList(uMqMessage);
         // 发送消息
         try {
             rabbitTemplate.convertAndSend(ExchangeConfig.CLINBRAIN_AMQ_SMS_DIRECT,
                     BindingsConfig.INFORM_SMS_DEFAULT,
-                    msg);
+                    new ObjectMapper().writeValueAsString(
+                            new MessageModel(Arrays.asList(uMqMessage.getId()))));
         } catch (AmqpException e) {
             log.error("消息发送失败:[{}]",e.getMessage());
-            for(UMqMessage item : insertList){
-                item.setUpdateTime(new Date());
-                item.setStatus("发送失败");
-                item.setLog("消息发送失败");
-                uMqMessageMapper.updateById(item);
-            }
+            uMqMessage.setUpdateTime(new Date());
+            uMqMessage.setLog("消息发送失败");
+            uMqMessage.setStatus("发送失败");
+            uMqMessageMapper.updateById(uMqMessage);
             e.printStackTrace();
         }
     }
