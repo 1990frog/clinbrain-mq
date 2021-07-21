@@ -5,6 +5,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface UMsgTemplateDao {
 
-    UMsgTemplate getTemplate(@Param("templateId") Long templateId);
+    UMsgTemplate getTemplate(@Param("templateId") Long templateId, @Param("contactType") String contactType);
 
 }

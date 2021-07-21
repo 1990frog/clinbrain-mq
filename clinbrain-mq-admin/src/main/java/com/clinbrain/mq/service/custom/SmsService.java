@@ -131,7 +131,7 @@ public class SmsService {
      */
     public UMsgTemplate getTemplate(SMSMessage smsMessage){
         Long templateId = smsMessage.getTemplateId();
-        UMsgTemplate template = uMsgTemplateDao.getTemplate(templateId);
+        UMsgTemplate template = uMsgTemplateDao.getTemplate(templateId,"sms");
         if (null != template){
             return template;
         }

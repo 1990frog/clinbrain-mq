@@ -9,8 +9,18 @@ import com.clinbrain.mq.common.enums.MessagesGenreEnum;
  */
 public class EmailMessage extends BaseMessage {
 
+    private String title;
+
     @Override
     public MessagesGenreEnum messageGenre() {
         return MessagesGenreEnum.EMAIL;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

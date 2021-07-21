@@ -48,20 +48,12 @@ public class EmailHandler {
             List<UMqMessage> uMqMessages = uMqMessageMapper.selectListByIds(model.getUMqMessageIds());
 
             uMqMessages.stream().forEach(item -> {
-
                 SimpleMailMessage msg = new SimpleMailMessage();
-                // 设置邮件主题
                 msg.setSubject("邮件标题");
-                // 设置邮件发送者，这个跟application.yml中设置的要一致
                 msg.setFrom(username);
-                // 设置邮件接收者，可以有多个接收者，中间用逗号隔开，以下类似
-                // message.setTo("123@qq.com","456qq.com");
-                msg.setTo(item.getAssignTo());
-                // 设置邮件发送日期
-                msg.setSentDate(new Date());
-                // 设置邮件的正文
-                msg.setText("邮件正文");
-                // 发送邮件
+                msg.setTo(item.getAssignTo().split(","));    // 设置邮件接收者，可以有多个接收者
+                msg.setSentDate(new Date());                        // 设置邮件发送日期
+                msg.setText(item.getContent());                     // 设置邮件的正文
                 javaMailSender.send(msg);
 
                 item.setLog("消息处理成功");

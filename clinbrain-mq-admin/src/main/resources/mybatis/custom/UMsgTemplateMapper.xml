@@ -9,14 +9,14 @@
         <result column="template_content" property="templateContent"></result>
     </resultMap>
 
-    <select id="getTemplate" parameterType="Long" resultMap="UMsgTemplateResultMap">
+    <select id="getTemplate" resultMap="UMsgTemplateResultMap">
         SELECT
             *
         FROM
             `u_msg_template` a
         WHERE
             a.id = #{templateId}
-            AND a.template_genre = 'sms'
+            AND a.template_genre = #{contactType}
     </select>
 
 </mapper>

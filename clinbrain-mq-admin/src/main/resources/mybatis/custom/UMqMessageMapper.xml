@@ -8,6 +8,7 @@
     <result column="retry" jdbcType="INTEGER" property="retry" />
     <result column="delay" jdbcType="VARCHAR" property="delay" />
     <result column="assign_to" jdbcType="VARCHAR" property="assignTo" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="original_data" jdbcType="VARCHAR" property="originalData" />
     <result column="log" jdbcType="VARCHAR" property="log" />
@@ -37,6 +38,9 @@
             </if>
             <if test="assignTo != null">
                 assign_to,
+            </if>
+            <if test="title != null">
+                title,
             </if>
             <if test="content != null">
                 content,
@@ -78,6 +82,9 @@
             </if>
             <if test="assignTo != null">
                 #{assignTo,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
             </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
@@ -124,6 +131,9 @@
         </if>
         <if test="assignTo != null and assignTo!=''">
             and assign_to= #{assignTo}
+        </if>
+        <if test="title != null and title!=''">
+            and title= #{title}
         </if>
         <if test="content != null and content!=''">
             and content= #{content}

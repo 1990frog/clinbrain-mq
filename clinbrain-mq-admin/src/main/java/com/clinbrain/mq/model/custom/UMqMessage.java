@@ -16,6 +16,7 @@ public class UMqMessage {
     private Integer  retry;
     private String  delay;
     private String  assignTo;
+    private String  title;
     private String  content;
     private String  originalData;
     private String  log;

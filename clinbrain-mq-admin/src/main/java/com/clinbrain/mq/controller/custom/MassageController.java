@@ -20,9 +20,4 @@ public class MassageController {
         massageService.sendEmail(emailMessage);
     }
 
-    @PostMapping("/sms")
-    public void sendSms(@RequestBody SMSMessage smsMessage){
-        massageService.sendSms(smsMessage);
-    }
-
 }
