@@ -1,4 +1,4 @@
-package com.clinbrain.mq.controller.admin;
+package com.clinbrain.mq.controller.custom;
 
 import com.clinbrain.mq.common.message.EmailMessage;
 import com.clinbrain.mq.common.message.SMSMessage;

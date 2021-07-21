@@ -62,8 +62,12 @@ public class ShiroFilterMapFactory {
 		filterChainDefinitionMap.put("/oss/**", "anon");
 		filterChainDefinitionMap.put("/druid/**", "anon");
 
+		//短信暂时放开
+		filterChainDefinitionMap.put("/sms/**", "anon");
+
 		// 对所有页面进行认证
 		filterChainDefinitionMap.put("/**", "user");
+
 		return filterChainDefinitionMap;
 	}
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clinbrain.mq.mapper.custom.UMsgTemplateDao">
+
+    <resultMap id="UMsgTemplateResultMap" type="com.clinbrain.mq.model.custom.sms.UMsgTemplate">
+        <id column="id" property="id"></id>
+        <result column="template_code" property="templateCode"></result>
+        <result column="template_genre" property="templateGenre"></result>
+        <result column="template_content" property="templateContent"></result>
+    </resultMap>
+
+    <select id="getTemplate" parameterType="Long" resultMap="UMsgTemplateResultMap">
+        SELECT
+            *
+        FROM
+            `u_msg_template` a
+        WHERE
+            a.id = #{templateId}
+            AND a.template_genre = 'sms'
+    </select>
+
+</mapper>
