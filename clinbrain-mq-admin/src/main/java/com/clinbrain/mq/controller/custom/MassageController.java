@@ -14,10 +14,9 @@ public class MassageController {
     @Autowired
     private MassageService massageService;
 
-    //@JsonCreator
     @PostMapping("/email")
-    public void sendEmail(@RequestBody EmailMessage emailMessage){
-        massageService.sendEmail(emailMessage);
+    public Object sendEmail(@RequestBody EmailMessage emailMessage){
+        return massageService.sendEmail(emailMessage);
     }
 
 }

@@ -39,7 +39,7 @@ public class MassageService {
 
     private final String GENRE_EMAIL= "email";
 
-    public void sendEmail(EmailMessage emailMessage) {
+    public Object sendEmail(EmailMessage emailMessage) {
         // 消息入库
         Date now = new Date();
         UMqMessage uMqMessage = new UMqMessage();;
@@ -55,7 +55,7 @@ public class MassageService {
             uMqMessage.setLog(e.getMessage());
             uMqMessage.setStatus("发送失败");
             uMqMessageMapper.insertSelective(uMqMessage);
-            return;
+            return "not ok";
         }
 
         // 处理模板内容
@@ -64,7 +64,7 @@ public class MassageService {
             uMqMessage.setLog("找不到指定模板ID=["+emailMessage.getTemplateId()+"]");
             uMqMessage.setStatus("发送失败");
             uMqMessageMapper.insertSelective(uMqMessage);
-            return;
+            return "not ok";
         }
 
         String content = uMsgTemplate.getTemplateContent();
@@ -111,7 +111,9 @@ public class MassageService {
             uMqMessage.setStatus("发送失败");
             uMqMessageMapper.updateById(uMqMessage);
             e.printStackTrace();
+            return "not ok";
         }
+        return "ok";
     }
 
     private void checkArguments(EmailMessage emailMessage) {
