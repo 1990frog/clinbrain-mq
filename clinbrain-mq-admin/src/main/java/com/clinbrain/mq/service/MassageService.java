@@ -56,7 +56,7 @@ public class MassageService {
             uMqMessage.setLog(e.getMessage());
             uMqMessage.setStatus("处理失败");
             uMqMessageMapper.insertSelective(uMqMessage);
-            return "not ok";
+            return "fail";
         }
 
         // 处理模板内容
@@ -65,7 +65,7 @@ public class MassageService {
             uMqMessage.setLog("找不到指定Email类型模板ID=["+emailMessage.getTemplateId()+"]");
             uMqMessage.setStatus("处理失败");
             uMqMessageMapper.insertSelective(uMqMessage);
-            return "not ok";
+            return "fail";
         }
 
         String content = uMsgTemplate.getTemplateContent();
@@ -112,9 +112,9 @@ public class MassageService {
             uMqMessage.setStatus("处理失败");
             uMqMessageMapper.updateById(uMqMessage);
             e.printStackTrace();
-            return "not ok";
+            return "fail";
         }
-        return "ok";
+        return "success";
     }
 
     private void checkArguments(EmailMessage emailMessage) {
