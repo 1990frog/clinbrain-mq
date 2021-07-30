@@ -111,7 +111,7 @@ public class SmsHandler {
         yanTaiRequest.setF(yanTaiProperties.getF());
         yanTaiRequest.setLoginName(yanTaiProperties.getLoginName());
         yanTaiRequest.setPassword(yanTaiProperties.getPassword());
-        yanTaiRequest.setScheduleTime(yanTaiProperties.getScheduleTime() == null?null:yanTaiProperties.getScheduleTime());
+        yanTaiRequest.setScheduleTime(StrUtil.isEmpty(yanTaiProperties.getScheduleTime())?null:yanTaiProperties.getScheduleTime());
         yanTaiRequest.setSpCode(yanTaiProperties.getSpCode());
         yanTaiRequest.setMessageContent(new String(content.getBytes(),"GBK"));
         yanTaiRequest.setUserNumber(new String(phoneNumbers.getBytes(),"GBK"));

@@ -18,7 +18,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setSpCode(String spCode) {
-        SpCode = new String(spCode.getBytes(),"GBK");;
+        SpCode = new String(spCode.getBytes(),"GBK");
     }
 
     public String getLoginName() {
@@ -27,7 +27,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setLoginName(String loginName) {
-        LoginName = new String(loginName.getBytes(),"GBK");;;
+        LoginName = new String(loginName.getBytes(),"GBK");
     }
 
     public String getPassword() {
@@ -36,7 +36,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setPassword(String password) {
-        Password = new String(password.getBytes(),"GBK");;;
+        Password = new String(password.getBytes(),"GBK");
     }
 
     public String getMessageContent() {
@@ -45,7 +45,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setMessageContent(String messageContent) {
-        MessageContent = new String(messageContent.getBytes(),"GBK");;;
+        MessageContent = new String(messageContent.getBytes(),"GBK");
     }
 
     public String getUserNumber() {
@@ -54,7 +54,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setUserNumber(String userNumber) {
-        UserNumber = new String(userNumber.getBytes(),"GBK");;;
+        UserNumber = new String(userNumber.getBytes(),"GBK");
     }
 
     public String getSerialNumber() {
@@ -63,7 +63,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setSerialNumber(String serialNumber) {
-        SerialNumber = new String(serialNumber.getBytes(),"GBK");;;
+        SerialNumber = new String(serialNumber.getBytes(),"GBK");
     }
 
     public String getScheduleTime() {
@@ -72,7 +72,7 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setScheduleTime(String scheduleTime) {
-        ScheduleTime = new String(scheduleTime.getBytes(),"GBK");;;
+        ScheduleTime = new String(scheduleTime.getBytes(),"GBK");
     }
 
     public String getF() {
@@ -81,6 +81,6 @@ public class YanTaiRequest {
 
     @SneakyThrows
     public void setF(String f) {
-        this.f = new String(f.getBytes(),"GBK");;;
+        this.f = new String(f.getBytes(),"GBK");
     }
 }
