@@ -10,6 +10,7 @@
     <result column="assign_to" jdbcType="VARCHAR" property="assignTo" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="trace_id" jdbcType="VARCHAR" property="traceId" />
     <result column="original_data" jdbcType="VARCHAR" property="originalData" />
     <result column="log" jdbcType="VARCHAR" property="log" />
     <result column="template_id" jdbcType="INTEGER" property="templateId" />
@@ -44,6 +45,9 @@
             </if>
             <if test="content != null">
                 content,
+            </if>
+            <if test="traceId != null">
+                traceId,
             </if>
             <if test="originalData != null">
                 original_data,
@@ -88,6 +92,9 @@
             </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="traceId != null">
+                #{traceId,jdbcType=VARCHAR},
             </if>
             <if test="originalData != null">
                 #{originalData,jdbcType=VARCHAR},
@@ -137,6 +144,9 @@
         </if>
         <if test="content != null and content!=''">
             and content= #{content}
+        </if>
+        <if test="traceId != null and traceId!=''">
+            and trace_id= #{traceId}
         </if>
         <if test="originalData != null and originalData!=''">
             and original_data= #{originalData}
@@ -194,5 +204,5 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
- 
+
 </mapper>

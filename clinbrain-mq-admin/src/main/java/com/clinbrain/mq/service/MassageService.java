@@ -43,6 +43,7 @@ public class MassageService {
         // 消息入库
         Date now = new Date();
         UMqMessage uMqMessage = new UMqMessage();;
+        uMqMessage.setTraceId(emailMessage.getTraceId());
         uMqMessage.setCreateTime(now);
         uMqMessage.setUpdateTime(now);
         uMqMessage.setMessageGenre(GENRE_EMAIL);

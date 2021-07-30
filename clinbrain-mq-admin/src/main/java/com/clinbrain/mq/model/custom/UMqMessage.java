@@ -10,6 +10,7 @@ import java.util.Date;
 @Builder
 @Data
 public class UMqMessage {
+    private String traceId;
     private Long id;
     private String messageGenre;
     private String  status;

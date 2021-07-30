@@ -18,6 +18,11 @@ import java.util.Map;
 public abstract class BaseMessage implements IClinMqMessage{
 
     /**
+     * 追踪标识
+     */
+    private String traceId;
+
+    /**
      * 指定人联系方式,指定到用户的手机号，邮箱号 等等具体的。 多个用，分隔
      */
     private String[] assign;
@@ -55,6 +60,14 @@ public abstract class BaseMessage implements IClinMqMessage{
 
     public List<String> getAssigns() {
         return new ArrayList<>();
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public String[] getAssign() {
