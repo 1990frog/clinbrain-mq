@@ -100,6 +100,14 @@ qiruiyun-sms:
   rf: 2
   rd: 0
 
+yantai:
+  apiUrl: https://smsapi.ums86.com:9600/sms/Api/Send.do
+  SpCode: clinbrain
+  LoginName: clinbrain
+  Password: 123456
+  ScheduleTime:
+  f: 1
+
 
 #mysql 8.0
 
