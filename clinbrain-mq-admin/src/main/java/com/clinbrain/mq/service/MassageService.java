@@ -54,7 +54,7 @@ public class MassageService {
             uMqMessage.setOriginalData(msg);
         }catch (MessageException | JsonProcessingException e){
             uMqMessage.setLog(e.getMessage());
-            uMqMessage.setStatus("发送失败");
+            uMqMessage.setStatus("处理失败");
             uMqMessageMapper.insertSelective(uMqMessage);
             return "not ok";
         }
@@ -62,8 +62,8 @@ public class MassageService {
         // 处理模板内容
         UMsgTemplate uMsgTemplate = uMsgTemplateDao.getTemplate(emailMessage.getTemplateId(),GENRE_EMAIL);
         if(uMsgTemplate == null){
-            uMqMessage.setLog("找不到指定模板ID=["+emailMessage.getTemplateId()+"]");
-            uMqMessage.setStatus("发送失败");
+            uMqMessage.setLog("找不到指定Email类型模板ID=["+emailMessage.getTemplateId()+"]");
+            uMqMessage.setStatus("处理失败");
             uMqMessageMapper.insertSelective(uMqMessage);
             return "not ok";
         }
@@ -106,10 +106,10 @@ public class MassageService {
                     new ObjectMapper().writeValueAsString(
                             new MessageModel(Arrays.asList(uMqMessage.getId()))));
         } catch (AmqpException | JsonProcessingException e) {
-            log.error("消息发送失败:[{}]",e.getMessage());
+            log.error("消息发送至MQ失败:[{}]",e.getMessage());
             uMqMessage.setUpdateTime(new Date());
-            uMqMessage.setLog("消息发送失败");
-            uMqMessage.setStatus("发送失败");
+            uMqMessage.setLog("消息发送至MQ失败");
+            uMqMessage.setStatus("处理失败");
             uMqMessageMapper.updateById(uMqMessage);
             e.printStackTrace();
             return "not ok";

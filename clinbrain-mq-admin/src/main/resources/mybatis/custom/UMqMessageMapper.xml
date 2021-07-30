@@ -47,7 +47,7 @@
                 content,
             </if>
             <if test="traceId != null">
-                traceId,
+                trace_id,
             </if>
             <if test="originalData != null">
                 original_data,

@@ -7,7 +7,7 @@ spring:
     druid:
      #主库数据源
      master:
-        url: jdbc:mysql://192.168.0.112:3306/clinbrain-mq?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT
+        url: jdbc:mysql://192.168.0.112:3306/clinbrain-mq?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
         username: root
         password: root
      #备数据源 #关闭
