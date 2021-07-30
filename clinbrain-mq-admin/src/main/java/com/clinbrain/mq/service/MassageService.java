@@ -37,7 +37,7 @@ public class MassageService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private final String GENRE_EMAIL= "email";
+    private static final String GENRE_EMAIL= "email";
 
     public Object sendEmail(EmailMessage emailMessage) {
         // 消息入库
