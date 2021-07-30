@@ -55,7 +55,7 @@ public class SmsService {
             UMsgTemplate template = getTemplate(smsMessage);
             if (null != template){
                 for (int i=0;i<assign.length;i++){
-                    saveAndSendMessage(assign[i],smsMessage.getTemplateParams(),template);
+                    saveAndSendMessage(assign[i],smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
                 }
             }
         }else {
@@ -65,7 +65,7 @@ public class SmsService {
                 if (null != template){
                     //根据 assignId 查询联系人信息
                     List<ContactVo> contactList = uContactDao.getContactList(assignId);
-                    dealMessage(contactList,smsMessage.getTemplateParams(),template);
+                    dealMessage(contactList,smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
                 }
             }else {
                 String[] assignGroup = smsMessage.getAssignGroup();
@@ -74,7 +74,7 @@ public class SmsService {
                     if (null != template){
                         //根据 assignGroup 查询联系人信息
                         List<ContactVo> contactList = uGroupsDao.getContactList(assignGroup);
-                        dealMessage(contactList,smsMessage.getTemplateParams(),template);
+                        dealMessage(contactList,smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
                     }
                 }
             }
@@ -86,9 +86,9 @@ public class SmsService {
      * @param contactList
      * @param template
      */
-    private void dealMessage(List<ContactVo> contactList,List<String> templateParams,UMsgTemplate template){
+    private void dealMessage(List<ContactVo> contactList,String traceId,List<String> templateParams,UMsgTemplate template){
         contactList.stream().forEach(cv -> {
-            saveAndSendMessage(cv.getContactValue(),templateParams,template);
+            saveAndSendMessage(cv.getContactValue(),traceId,templateParams,template);
         });
     }
 
@@ -97,11 +97,12 @@ public class SmsService {
      * @param phoneNumbers 手机号
      * @param template 模板对象
      */
-    private void saveAndSendMessage(String phoneNumbers,List<String> templateParams,UMsgTemplate template){
+    private void saveAndSendMessage(String phoneNumbers,String traceId,List<String> templateParams,UMsgTemplate template){
         String originalData = template.getTemplateContent();
         Object[] objectsParams = templateParams.toArray();
         String formatContent = MessageFormat.format(originalData, objectsParams);
         UMqMessage uMqMessage = UMqMessage.builder()
+                .traceId(traceId)
                 .messageGenre("sms")
                 .status("准备发送")
                 .assignTo(phoneNumbers)

@@ -10,7 +10,7 @@ public interface UContactDetailsMapper {
      * @description 根据联系人ID列表查询具体的联系方式
      *
      * @author hexun
-     * @param ids 联系人ID列表
+     * @param users 联系人ID列表
      * @param contactType 联系方式
      * @return
      */
@@ -20,7 +20,7 @@ public interface UContactDetailsMapper {
      * @description
      *
      * @author hexun
-     * @param ids 分组ID列表
+     * @param groups 分组ID列表
      * @param contactType 联系方式
      * @return
      */
