@@ -61,23 +61,25 @@ public class SmsHandler {
             //sendSms(jsonObject);
             UMqMessage uMqMessage = JSON.parseObject(jsonObject.getString("uMqMessage"), UMqMessage.class);
             String[] resp = sendSmsOfYanTai(jsonObject).split("&");
-            String code = null,desc = null;
-            for(String item : resp){
-                String[] temp = item.split("=");
-                if(item.contains("result")){
-                    code = temp[1];
-                }else if(item.contains("description")){
-                    desc = temp[1];
+            if(resp.length > 1){
+                String code = null,desc = null;
+                for(String item : resp){
+                    String[] temp = item.split("=");
+                    if(item.contains("result")){
+                        code = temp[1];
+                    }else if(item.contains("description")){
+                        desc = temp[1];
+                    }
                 }
+                if("0".equals(code)){
+                    uMqMessage.setLog("消息发送成功");
+                }else{
+                    uMqMessage.setLog(desc);
+                }
+                uMqMessage.setStatus("发送成功");
+                uMqMessage.setUpdateTime(new Date());
+                uMqMessageMapper.updateById(uMqMessage);
             }
-            if("0".equals(code)){
-                uMqMessage.setLog("消息发送成功");
-            }else{
-                uMqMessage.setLog(desc);
-            }
-            uMqMessage.setStatus("发送成功");
-            uMqMessage.setUpdateTime(new Date());
-            uMqMessageMapper.updateById(uMqMessage);
 
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         } catch (Exception e) {
