@@ -3,6 +3,7 @@ package com.clinbrain.mq.rabbitmq.consumer;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -21,6 +22,7 @@ import com.clinbrain.mq.model.custom.sms.YanTaiRequest;
 import com.rabbitmq.client.Channel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -100,30 +103,63 @@ public class SmsHandler {
         UMqMessage uMqMessage = JSON.parseObject(uMqMessageString, UMqMessage.class);
         String content = uMqMessage.getContent();
         // 检查参数是否正确
-        String log = check(uMqMessage,yanTaiProperties);
-        if(log != null){
-            uMqMessage.setLog(log);
+        String logStr = check(uMqMessage,yanTaiProperties);
+        if(logStr != null){
+            uMqMessage.setLog(logStr);
             uMqMessage.setStatus("发送失败");
             uMqMessage.setUpdateTime(new Date());
             uMqMessageMapper.updateById(uMqMessage);
-            return log;
+            return logStr;
         }
         String requestUrl = yanTaiProperties.getApiUrl();
         YanTaiRequest  yanTaiRequest = new YanTaiRequest();
+        yanTaiRequest.setSpCode(yanTaiProperties.getSpCode());
         yanTaiRequest.setF(yanTaiProperties.getF());
         yanTaiRequest.setLoginName(yanTaiProperties.getLoginName());
         yanTaiRequest.setPassword(yanTaiProperties.getPassword());
-        yanTaiRequest.setScheduleTime(StrUtil.isEmpty(yanTaiProperties.getScheduleTime())?null:yanTaiProperties.getScheduleTime());
-        yanTaiRequest.setSpCode(yanTaiProperties.getSpCode());
-        yanTaiRequest.setMessageContent(new String(content.getBytes(),"GBK"));
+        yanTaiRequest.setScheduleTime(yanTaiProperties.getScheduleTime());
+        yanTaiRequest.setExtendAccessNum(yanTaiProperties.getExtendAccessNum());
+        if(yanTaiProperties.isMustFill()){
+            StringBuilder msg = new StringBuilder(new String(content.getBytes(), "GBK"));
+            if(msg.length() > yanTaiProperties.getCount()){
+                msg = new StringBuilder(msg.substring(0, yanTaiProperties.getCount()));
+            }else{
+                int count = yanTaiProperties.getCount() - msg.length();
+                for (int i = 0; i < count; i++) {
+                    msg.append(new String(yanTaiProperties.getFillChar().getBytes(), "GBK"));
+                }
+            }
+            yanTaiRequest.setMessageContent(msg.toString());
+        }else{
+            yanTaiRequest.setMessageContent(new String(content.getBytes(),"GBK"));
+        }
+        //yanTaiRequest.setMessageContent(new String(content.getBytes(),"GBK"));
         yanTaiRequest.setUserNumber(new String(phoneNumbers.getBytes(),"GBK"));
-        yanTaiRequest.setSerialNumber(new String(UUID.randomUUID().toString().getBytes(),"GBK"));
-        // 将UTF8 编码装换为GBK 或 GB2312
+        String uuid = null;
+        if(isNumeric(uMqMessage.getTraceId()) && uMqMessage.getTraceId().length() == 20){
+            uuid = new String(uMqMessage.getTraceId().getBytes(),"GBK");
+        }else{
+            String timestamp = new String((System.currentTimeMillis()+"").getBytes(),"GBK");
+            timestamp = timestamp.substring(3);
+            String random = new String((new Random().nextInt(9999)+"").getBytes(),"GBK");
+            // 6位企业编号 + 10位时间戳 + 4位随机数
+            uuid = new String(yanTaiProperties.getSpCode().getBytes(),"GBK") + timestamp + random;
+        }
+        yanTaiRequest.setSerialNumber(uuid);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(JSON.toJSONString(yanTaiRequest),headers);
+        String request = JSON.toJSONString(yanTaiRequest, SerializerFeature.WriteMapNullValue);
+        HttpEntity<String> entity = new HttpEntity<>(request,headers);
+        log.info("调用第三方平台接口请求参数:[{}]",request);
         String status = restTemplate.postForEntity(requestUrl,entity,String.class).getBody();
-        return new String(status.getBytes(),"UTF-8");
+        String respMsg = new String(status.getBytes("ISO-8859-1"),"GBK");
+        log.info("调用第三方平台接口返回:[{}]",respMsg);
+        return respMsg;
+    }
+
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        return pattern.matcher(str).matches();
     }
 
     private String check(UMqMessage uMqMessage, YanTaiProperties yanTaiProperties) {
