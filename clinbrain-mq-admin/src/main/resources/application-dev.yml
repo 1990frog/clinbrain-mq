@@ -55,7 +55,7 @@ spring:
           multi-statement-allow: true
   # rabbitmq
   rabbitmq:
-    host: 127.0.0.1
+    host: 192.168.0.115
     port: 5672
     username: clinbrain
     password: clinbrain
@@ -101,12 +101,16 @@ qiruiyun-sms:
   rd: 0
 
 yantai:
-  apiUrl: https://smsapi.ums86.com:9600/sms/Api/Send.do
-  SpCode: clinbrain
-  LoginName: clinbrain
-  Password: 123456
+  apiUrl: https://api.ums86.com:9600/sms/Api/Send.do
+  SpCode: 262248
+  LoginName: yt_ydyy
+  Password: Ydyy0405$#@
   ScheduleTime:
+  ExtendAccessNum:
   f: 1
+  mustFill: true
+  count: 100
+  fillChar: " "
 
 
 #mysql 8.0
