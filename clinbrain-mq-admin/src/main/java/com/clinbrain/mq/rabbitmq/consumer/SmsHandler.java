@@ -68,7 +68,7 @@ public class SmsHandler {
             JSONObject jsonObject = JSON.parseObject(msg);
             //sendSms(jsonObject);
             UMqMessage uMqMessage = JSON.parseObject(jsonObject.getString("uMqMessage"), UMqMessage.class);
-            String[] resp = sendSmsOfYanTai(jsonObject).split("&");
+            String[] resp = yanTaiHttpclient(jsonObject).split("&");
             if(resp.length > 1){
                 String code = null,desc = null;
                 for(String item : resp){
@@ -120,52 +120,43 @@ public class SmsHandler {
             return logStr;
         }
         String requestUrl = yanTaiProperties.getApiUrl();
-        YanTaiRequest  yanTaiRequest = new YanTaiRequest();
-        yanTaiRequest.setSpCode(yanTaiProperties.getSpCode());
-        yanTaiRequest.setF(yanTaiProperties.getF());
-        yanTaiRequest.setLoginName(yanTaiProperties.getLoginName());
-        yanTaiRequest.setPassword(yanTaiProperties.getPassword());
-        yanTaiRequest.setScheduleTime(yanTaiProperties.getScheduleTime());
-        yanTaiRequest.setExtendAccessNum(yanTaiProperties.getExtendAccessNum());
+        String message = content;
         if(yanTaiProperties.isMustFill()){
-            StringBuilder msg = new StringBuilder(new String(content.getBytes(), "GBK"));
+            StringBuilder msg = new StringBuilder(content);
             if(msg.length() > yanTaiProperties.getCount()){
                 msg = new StringBuilder(msg.substring(0, yanTaiProperties.getCount()));
             }else{
                 int count = yanTaiProperties.getCount() - msg.length();
                 for (int i = 0; i < count; i++) {
-                    msg.append(new String(yanTaiProperties.getFillChar().getBytes(), "GBK"));
+                    msg.append(yanTaiProperties.getFillChar());
                 }
             }
-            yanTaiRequest.setMessageContent(msg.toString());
-        }else{
-            yanTaiRequest.setMessageContent(new String(content.getBytes(),"GBK"));
+            message = msg.toString();
         }
-        yanTaiRequest.setUserNumber(new String(phoneNumbers.getBytes(),"GBK"));
         String uuid = null;
         if(isNumeric(uMqMessage.getTraceId()) && uMqMessage.getTraceId().length() == 20){
-            uuid = new String(uMqMessage.getTraceId().getBytes(),"GBK");
+            uuid = uMqMessage.getTraceId();
         }else{
-            String timestamp = new String((System.currentTimeMillis()+"").getBytes(),"GBK");
+            String timestamp = System.currentTimeMillis()+"";
             timestamp = timestamp.substring(3);
-            String random = new String((new Random().nextInt(9999)+"").getBytes(),"GBK");
+            String random = new Random().nextInt(9999)+"";
             // 6位企业编号 + 10位时间戳 + 4位随机数
-            uuid = new String(yanTaiProperties.getSpCode().getBytes(),"GBK") + timestamp + random;
+            uuid = yanTaiProperties.getSpCode() + timestamp + random;
         }
-        yanTaiRequest.setSerialNumber(uuid);
         String info = null;
         try{
             HttpClient httpclient = new HttpClient();
             PostMethod post = new PostMethod(requestUrl);
             post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-            post.addParameter("SpCode", yanTaiRequest.getSpCode());
-            post.addParameter("LoginName", yanTaiRequest.getLoginName());
-            post.addParameter("Password", yanTaiRequest.getPassword());
-            post.addParameter("MessageContent", yanTaiRequest.getMessageContent());
-            post.addParameter("UserNumber", yanTaiRequest.getUserNumber());
-            post.addParameter("SerialNumber", new String("".getBytes(),"GBK"));
-            post.addParameter("ScheduleTime", new String("".getBytes(),"GBK"));
-            post.addParameter("f", yanTaiRequest.getF());
+            post.addParameter("SpCode", yanTaiProperties.getSpCode());
+            post.addParameter("LoginName", yanTaiProperties.getLoginName());
+            post.addParameter("Password", yanTaiProperties.getPassword());
+            post.addParameter("MessageContent", message);
+            post.addParameter("UserNumber", phoneNumbers);
+            post.addParameter("SerialNumber", uuid);
+            post.addParameter("ScheduleTime", "");
+            post.addParameter("ExtendAccessNum", "");
+            post.addParameter("f", yanTaiProperties.getF());
             httpclient.executeMethod(post);
             info = new String(post.getResponseBody(),"gbk");
             log.info("短信接口响应内容：[{}]",info);
