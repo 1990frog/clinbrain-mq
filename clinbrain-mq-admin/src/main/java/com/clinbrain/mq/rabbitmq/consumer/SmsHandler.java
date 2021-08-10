@@ -235,7 +235,7 @@ public class SmsHandler {
         params.add("LoginName", yanTaiRequest.getLoginName());
         params.add("Password", yanTaiRequest.getPassword());
         params.add("MessageContent", yanTaiRequest.getMessageContent());
-        params.add("UserNumber", yanTaiRequest.getSerialNumber());
+        params.add("UserNumber", yanTaiRequest.getUserNumber());
         params.add("SerialNumber", yanTaiRequest.getSerialNumber());
         params.add("ScheduleTime", yanTaiRequest.getScheduleTime());
         params.add("ExtendAccessNum", yanTaiRequest.getExtendAccessNum());
