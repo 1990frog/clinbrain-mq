@@ -7,14 +7,14 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 <configuration scan="true" scanPeriod="60 seconds" debug="false"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd">
-	
-	
+
+
 	<!-- 定义日志的根目录 -->
-    <property name="LOG_HOME" value="/springbootv2-log" />
+    <property name="LOG_HOME" value="syslog" />
 	  <!-- 定义日志文件名称 -->
-    <property name="appName" value="springbootv2"></property>
-     
-     
+    <property name="appName" value="sys_mq"></property>
+
+
      <!-- 控制台输出 -->
 
 	<!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
@@ -37,17 +37,17 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
             <!--</springProfile>-->
         </layout>
 	</appender>
-	
+
 	<!-- 控制台输出 END -->
-	
-	
+
+
 	<!-- 文件输出 -->
 	 <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
     <appender name="appLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 指定日志文件的名称 -->
         <file>${LOG_HOME}/${appName}.log</file>
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。 -->
-　　　　	<append>true</append> 
+　　　　	<append>true</append>
         <!--
 	       	 当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名
 	        TimeBasedRollingPolicy： 最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责出发滚动。
@@ -77,14 +77,14 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
         </layout>
     </appender>
-	
+
 	<!-- 文件输出-END -->
-	
-	
-	
-	
-	
-	 
+
+
+
+
+
+
 	<!--
         logger主要用于存放日志对象，也可以定义日志类型、级别
         name：表示匹配的logger类型前缀，也就是包的前半部分
@@ -93,7 +93,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         false：表示只用当前logger的appender-ref，
         true：表示当前logger的appender-ref和rootLogger的appender-ref都有效
     -->
-    
+
 	<!-- mybatis logger -->
     <logger name="org.mybatis" level="error"/>
     <logger name="java.sql.Connection" level="DEBUG"/>
@@ -101,22 +101,23 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     <logger name="java.sql.PreparedStatement" level="DEBUG"/>
 	<!-- 自己项目的 -->
 	<logger name="com.clinbrain" level="DEBUG"/>
-	
-	
+
+
 	<!--
     	root与logger是父子关系，没有特别定义则默认为root，任何一个类只会和一个logger对应，
     	要么是定义的logger，要么是root，判断的关键在于找到这个logger，然后判断这个logger的appender和level。
     -->
-    
+
 
 	<!-- dev环境 -->
 	<springProfile name="dev">
 	    <root level="INFO">
 			<!-- 控制台 -->
 			<appender-ref ref="console" />
+            <appender-ref ref="appLogAppender"/>
 	    </root>
 	</springProfile>
-	
+
 	 <!-- 生产环境 -->
     <springProfile name="prod">
 	    <root level="INFO">
@@ -130,7 +131,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 
 
 
-<!-- 
+<!--
 
 
 idea好像会报错解决方案
@@ -170,8 +171,8 @@ spring :
   # 环境 dev|test|prod
   profiles :
     active : prod
-    
-来进行配置的  
+
+来进行配置的
 
 
 3、如果改变了的目录结构需要修改 上面的 name为自己的项目目录

@@ -242,7 +242,7 @@ public class SmsHandler {
         params.add("f", yanTaiRequest.getF());
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 
-        log.info("调用第三方平台接口请求参数:[{}]",requestEntity);
+        log.info("调用第三方平台接口请求参数:[{}]",JSON.toJSONString(requestEntity, SerializerFeature.WriteMapNullValue));
         String status = restTemplate.postForEntity(requestUrl,requestEntity,String.class).getBody();
         String respMsg = new String(status.getBytes("ISO-8859-1"),"GBK");
         log.info("调用第三方平台接口返回:[{}]",respMsg);
