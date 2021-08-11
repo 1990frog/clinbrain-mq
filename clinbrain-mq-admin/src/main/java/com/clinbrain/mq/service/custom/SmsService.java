@@ -151,20 +151,20 @@ public class SmsService {
         int group = 0;
         while (matcher.find()){
             String item = matcher.group();
+            //去掉前后{}
             item = item.substring(1,item.length() -1);
-            String target = "["+templateParams.get(group)+"]";
+            String target = templateParams.get(group);
+            // 超过模板定义的部分截断，不足模板长度用空格追加
             if(item.length() > target.length()){
                 for (int i = 0; i < item.length() - target.length(); i++) {
                     target += " ";
                 }
-                target +=",";
             }else{
-                target = target.substring(0,item.length() - 1) + ",";
+                target = target.substring(0,item.length());
             }
             smsContent = smsContent.replaceFirst(item, target);
             group++;
         }
-        smsContent = smsContent.replaceAll("\\{","").replaceAll("}","");
-        return smsContent.substring(0,smsContent.length() - 1);
+        return smsContent.replaceAll("\\{","").replaceAll("}","");
     }
 }
