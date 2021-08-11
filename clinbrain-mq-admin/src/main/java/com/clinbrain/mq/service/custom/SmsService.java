@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -100,7 +102,8 @@ public class SmsService {
     private void saveAndSendMessage(String phoneNumbers,String traceId,List<String> templateParams,UMsgTemplate template){
         String originalData = template.getTemplateContent();
         Object[] objectsParams = templateParams.toArray();
-        String formatContent = MessageFormat.format(originalData, objectsParams);
+        //String formatContent = MessageFormat.format(originalData, objectsParams);
+        String formatContent = parseTemplate(originalData, templateParams);
         UMqMessage uMqMessage = UMqMessage.builder()
                 .traceId(traceId)
                 .messageGenre("sms")
@@ -138,5 +141,30 @@ public class SmsService {
             return template;
         }
         return null;
+    }
+
+    // 短信模板：报警服务器地址{xxxxxxxxxxxxxx}报警类型{xxxxxxxxxx}报警时间{xxxxxxxxxxxxxxxxxxxx}报警内容进程{xxxxxxxxxxxxxxxxxxxx}
+    private String parseTemplate(String content, List<String> templateParams) {
+        String smsContent = content;
+        Pattern pattern = Pattern.compile("(\\{[x]*\\})");
+        Matcher matcher = pattern.matcher(smsContent);
+        int group = 0;
+        while (matcher.find()){
+            String item = matcher.group();
+            item = item.substring(1,item.length() -1);
+            String target = "["+templateParams.get(group)+"]";
+            if(item.length() > target.length()){
+                for (int i = 0; i < item.length() - target.length(); i++) {
+                    target += " ";
+                }
+                target +=",";
+            }else{
+                target = target.substring(0,item.length() - 1) + ",";
+            }
+            smsContent = smsContent.replaceFirst(item, target);
+            group++;
+        }
+        smsContent = smsContent.replaceAll("\\{","").replaceAll("}","");
+        return smsContent.substring(0,smsContent.length() - 1);
     }
 }

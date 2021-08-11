@@ -120,21 +120,9 @@ public class SmsHandler {
             return logStr;
         }
         String requestUrl = yanTaiProperties.getApiUrl();
-        String message = content;
-        if(yanTaiProperties.isMustFill()){
-            StringBuilder msg = new StringBuilder(content);
-            if(msg.length() > yanTaiProperties.getCount()){
-                msg = new StringBuilder(msg.substring(0, yanTaiProperties.getCount()));
-            }else{
-                int count = yanTaiProperties.getCount() - msg.length();
-                for (int i = 0; i < count; i++) {
-                    msg.append(yanTaiProperties.getFillChar());
-                }
-            }
-            message = msg.toString();
-        }
         String uuid = null;
-        if(isNumeric(uMqMessage.getTraceId()) && uMqMessage.getTraceId().length() == 20){
+        if(uMqMessage.getTraceId() != null &&
+                isNumeric(uMqMessage.getTraceId()) && uMqMessage.getTraceId().length() == 20){
             uuid = uMqMessage.getTraceId();
         }else{
             String timestamp = System.currentTimeMillis()+"";
@@ -151,7 +139,7 @@ public class SmsHandler {
             post.addParameter("SpCode", yanTaiProperties.getSpCode());
             post.addParameter("LoginName", yanTaiProperties.getLoginName());
             post.addParameter("Password", yanTaiProperties.getPassword());
-            post.addParameter("MessageContent", message);
+            post.addParameter("MessageContent", content);
             post.addParameter("UserNumber", phoneNumbers);
             post.addParameter("SerialNumber", uuid);
             post.addParameter("ScheduleTime", "");
