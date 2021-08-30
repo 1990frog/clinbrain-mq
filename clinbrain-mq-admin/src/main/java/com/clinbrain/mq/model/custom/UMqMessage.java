@@ -22,6 +22,7 @@ public class UMqMessage {
     private String  originalData;
     private String  log;
     private Long  templateId;
+    private String  attachPaths;
     private String expired;
     private Date  createTime;
     private Date  updateTime;

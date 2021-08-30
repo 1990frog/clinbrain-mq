@@ -14,6 +14,7 @@
     <result column="original_data" jdbcType="VARCHAR" property="originalData" />
     <result column="log" jdbcType="VARCHAR" property="log" />
     <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="attach_paths" jdbcType="VARCHAR" property="attachPaths" />
     <result column="expired" jdbcType="VARCHAR" property="expired" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -57,6 +58,9 @@
             </if>
             <if test="templateId != null">
                 template_id,
+            </if>
+            <if test="attachPaths != null">
+                attach_paths,
             </if>
             <if test="expired != null">
                 expired,
@@ -104,6 +108,9 @@
             </if>
             <if test="templateId != null">
                 #{templateId,jdbcType=INTEGER},
+            </if>
+            <if test="attachPaths != null">
+                #{attachPaths,jdbcType=VARCHAR},
             </if>
             <if test="expired != null">
                 #{expired,jdbcType=VARCHAR},
@@ -156,6 +163,9 @@
         </if>
         <if test="templateId != null and templateId!=''">
             and template_id= #{templateId}
+        </if>
+        <if test="attachPaths != null and attachPaths!=''">
+            and attach_paths= #{attachPaths}
         </if>
         <if test="expired != null and expired!=''">
             and expired= #{expired}
