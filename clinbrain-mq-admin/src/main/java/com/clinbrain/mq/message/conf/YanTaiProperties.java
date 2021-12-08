@@ -1,11 +1,12 @@
-package com.clinbrain.mq.common.conf;
+package com.clinbrain.mq.message.conf;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ConfigurationProperties(prefix = "yantai")
+@ConfigurationProperties(prefix = "sms")
 @Data
 public class YanTaiProperties {
     private String apiUrl;          //接口地址

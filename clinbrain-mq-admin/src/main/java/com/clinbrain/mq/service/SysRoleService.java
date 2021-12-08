@@ -1,6 +1,7 @@
 package com.clinbrain.mq.service;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.clinbrain.mq.common.base.BaseService;
 import com.clinbrain.mq.common.support.ConvertUtil;
 import com.clinbrain.mq.mapper.auto.TsysPermissionRoleMapper;
@@ -102,7 +103,7 @@ public class SysRoleService implements BaseService<TsysRole, TsysRoleExample> {
 		//添加权限
 		List<String> prems=ConvertUtil.toListStrArray(prem);
 		for (String premid : prems) {
-			TsysPermissionRole tsysPermissionRole=new TsysPermissionRole(RandomUtil.randomUUID() , roleid, premid);
+			TsysPermissionRole tsysPermissionRole=new TsysPermissionRole(StrUtil.uuid() , roleid, premid);
 			tsysPermissionRoleMapper.insertSelective(tsysPermissionRole);
 		}
 		return tsysRoleMapper.insertSelective(record);
@@ -135,7 +136,7 @@ public class SysRoleService implements BaseService<TsysRole, TsysRoleExample> {
 		List<String> prems=ConvertUtil.toListStrArray(powerIds);
 		int i=0;
 		for (String pre : prems) {
-			TsysPermissionRole permissionRole=new TsysPermissionRole(RandomUtil.randomUUID(), roleId, pre);
+			TsysPermissionRole permissionRole=new TsysPermissionRole(StrUtil.uuid(), roleId, pre);
 			tsysPermissionRoleMapper.insertSelective(permissionRole);
 			i++;
 		}

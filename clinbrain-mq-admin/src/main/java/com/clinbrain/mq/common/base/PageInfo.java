@@ -80,7 +80,7 @@ public class PageInfo<T> implements Serializable {
                 this.startRow = 0;
                 this.endRow = 0;
             } else {
-                this.startRow = page.getStartRow() + 1;
+                this.startRow = Long.valueOf(page.getStartRow()).intValue()  + 1;
                 //计算实际的endRow（最后一页的时候特殊）
                 this.endRow = this.startRow - 1 + this.size;
             }

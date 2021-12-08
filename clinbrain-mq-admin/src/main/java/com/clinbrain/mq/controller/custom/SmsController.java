@@ -1,8 +1,14 @@
 package com.clinbrain.mq.controller.custom;
 
+import com.clinbrain.mq.common.conf.SmsServiceBeanConfig;
+import com.clinbrain.mq.common.conf.V2Config;
 import com.clinbrain.mq.common.message.SMSMessage;
+import com.clinbrain.mq.service.BaseSmsService;
+import com.clinbrain.mq.service.ISmsTemplateService;
 import com.clinbrain.mq.service.custom.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 public class SmsController {
 
     @Autowired
-    private SmsService smsService;
+    private SmsServiceBeanConfig smsServiceBeanConfig;
+
+    @Autowired
+    private V2Config config;
 
     /**
      * 发送短信
@@ -26,6 +35,7 @@ public class SmsController {
     @PostMapping("/send")
     public String send(@RequestBody SMSMessage smsMessage){
         if (null != smsMessage){
+            ISmsTemplateService smsService = smsServiceBeanConfig.createSmsService(config.getName()+"Service");
             smsService.sendSms(smsMessage);
             return "success";
         }

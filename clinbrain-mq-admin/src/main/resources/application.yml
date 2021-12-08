@@ -1,11 +1,11 @@
 # 项目相关配置
 fuce:
   #名称
-  name: mq
+  name: clinbrain-message
   #版本
-  version: 4.1
+  version: 1.0
   #版权年份
-  copyright-year: 2018
+  copyright-year: 2021
   #邮件功能
   #邮箱发送smtp
   email-smtp: smtp.sina.com
@@ -36,7 +36,7 @@ server :
 spring :
   # 环境 dev|test|prod
   profiles :
-    active : dev
+    active : wuhan
     #引入其他配置文件，例如ftpHX 未配置文件application-ftpHX.yml
     #include: ftpHX,ftpCloud
   servlet:
@@ -100,11 +100,3 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
-oss:
-  enable: true
-  info: true
-  path-style-access: false  #使用云OSS 需要关闭
-  endpoint: http://127.0.0.1:9000 #对应上图 ③ 处配置
-  access-key: minioadmin  # 上文创建的AK
-  secret-key: minioadmin # 上文创建的SK
-  bucket-name: mq-cloud  # 上文创建的桶名称

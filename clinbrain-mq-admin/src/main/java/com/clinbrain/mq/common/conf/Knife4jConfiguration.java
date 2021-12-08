@@ -30,7 +30,7 @@ public class Knife4jConfiguration {
                         .version(v2Config.getVersion())
                         .build())
                 //分组名称
-                .groupName("mq")
+                .groupName("clinbrain-mq")
                 .select()
                 //这里指定Controller扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.clinbrain.mq.controller"))

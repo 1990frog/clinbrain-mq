@@ -26,7 +26,7 @@ spring:
      maxWait: 5000
      poolPreparedStatements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
      maxPoolPreparedStatementPerConnection-size: 20
-     validationQuery: SELECT 1 FROM DUAL
+     validationQuery: SELECT 1
      validationQueryTimeout: 20000
      testOnBorrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
      testOnReturn: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
@@ -82,85 +82,7 @@ spring:
         #开启 DEBUG 模式
         debug: true
 
-#阿里云短信服务配置
-aliyun-sms:
-  accessKeyId: xxx
-  secret: xxx
-  signName: xxx
-
-#企瑞云短信参数配置
-qiruiyun-sms:
-  url: http://api.qirui.com:7891/mt
-  dc: 8
-  un: 2317600010
-  pw: f5c8fc6254c03f44fffe
-  sm: 【clinbrain】
-  da: 13162978297
-  tf: 3
-  rf: 2
-  rd: 0
-
-yantai:
-  apiUrl: https://api.ums86.com:9600/sms/Api/Send.do
-  SpCode: 262248
-  LoginName: yt_ydyy
-  Password: Ydyy0405$#@
-  ScheduleTime:
-  ExtendAccessNum:
-  f: 1
-  mustFill: true
-  count: 100
-  fillChar: " "
-
-
-#mysql 8.0
-
-#spring:
-#  datasource:
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    #druid连接池配置
-#    druid:
-#     # 主库数据源
-#     master:
-#        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT&autoReconnect=true&useSSL=false
-#        username: root
-#        password: root
-#        #树熊数据源
-#     slave:
-#        enabled : false
-#        url: jdbc:mysql://localhost:3306/test2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT&autoReconnect=true&useSSL=false
-#        username: root
-#        password: root
-#        #配置初始化连接数大小
-#     initial-size: 10
-#     # 最大连接数
-#     max-active: 50
-#     #最小连接数
-#     min-idle: 10
-#     #获取连接等待超时时间
-#     max-wait: 5000
-#     pool-prepared-statements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
-#     max-pool-prepared-statement-per-connection-size: 20
-#     validation-query: SELECT 1 FROM DUAL
-#     validation-query-timeout: 20000
-#     test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-#     test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-#     test-while-idle: true #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
-#     time-between-eviction-runs-millis: 60000 #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-#     min-evictable-idle-time-millis: 300000  #一个连接在池中最小生存的时间，单位是毫秒
-#     #StatViewServlet配置。（因为暴露的监控信息比较敏感，支持密码加密和访问ip限定）
-#     stat-view-servlet:
-#      enabled: true
-#      url-pattern: /druid/*
-#      #可以增加访问账号密码【去掉注释就可以】
-#      #login-username: admin
-#      #login-password: admin
-#     filter:
-#      stat:
-#        log-slow-sql: true
-#        slow-sql-millis: 1000
-#        merge-sql: true
-#      wall:
-#        config:
-#          multi-statement-allow: true
+sms:
+  jdbcUrl: jdbc:sqlserver://192.168.0.113:1433;DataBaseName=mq
+  username: sa
+  password: P@ssw0rd123
