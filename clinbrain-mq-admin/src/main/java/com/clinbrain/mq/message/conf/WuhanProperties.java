@@ -1,6 +1,7 @@
 package com.clinbrain.mq.message.conf;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -12,11 +13,12 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "sms")
 @Data
 @Configuration
+@ConditionalOnProperty(prefix = "spring.profiles.", name = "active", havingValue = "wuhan")
 public class WuhanProperties {
 
     private String jdbcUrl;
     private String username;
     private String password;
 
-    private static final String ADD_SQL = "";
+    public static final String ADD_SQL = "insert into smsdb.dbo.SendSms values(?,?,getdate(),1,null,null,0,null,null,null,null)";
 }

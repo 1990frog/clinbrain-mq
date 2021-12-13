@@ -1,6 +1,7 @@
 package com.clinbrain.mq.message.conf;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ConfigurationProperties(prefix = "sms")
 @Data
+@ConditionalOnProperty(prefix = "spring.profiles.", name = "active", havingValue = "yantai")
 public class YanTaiProperties {
     private String apiUrl;          //接口地址
     private String spCode;          //企业编号

@@ -39,7 +39,23 @@
         </if>
     </select>
 
+    <select id="selectListByContactId" resultMap="BaseResultMap">
+        select *
+        from u_contact_details
+        where contact_id = #{contactId}
+    </select>
 
+    <insert id="insertBatch" parameterType="list">
+        insert into u_contact_details(contact_id,contact_type, contact_value, is_default, check_default,
+                                      create_time, update_time) values
+        <foreach collection="details" item="contactDetail" separator="," open="(" close=")">
+            ${contactDetail.contactId},'${contactDetail.contactType}',
+            '${contactDetail.contactValue}',${contactDetail.isDefault},
+            ${contactDetail.checkDefault},now(),now()
+        </foreach>
+    </insert>
 
-
+    <delete id="deleteById" parameterType="integer">
+        delete from u_contact_details where id = ${id}
+    </delete>
 </mapper>

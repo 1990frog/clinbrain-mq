@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('信息模板修改')"/>
+</head>
+<body>
+<form class="layui-form" action=""  th:object="${msgTemplate}">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+				<div class="layui-form-item layui-hide">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="*{id}" name="id" lay-verify="title"
+                               autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">模板标识</label>
+                    <div class="layui-input-block">
+                        <input th:value="*{templateCode}" type="text" name="templateCode" autocomplete="off" placeholder="模板code 标识" class="layui-input">
+                    </div>
+                </div>
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">模板类型</label>
+                    <div class="layui-input-block">
+                        <select name="templateGenre" th:field="*{templateGenre}">
+                            <option value="sms">短信</option>
+                            <option value="email">邮件</option>
+                        </select>
+                    </div>
+                </div>
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">模板内容</label>
+                    <div class="layui-input-block">
+                        <textarea th:text="*{templateContent}" name="templateContent" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit=""
+                    lay-filter="msgTemplate-update">
+                <i class="layui-icon layui-icon-ok"></i>
+				提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+				重置
+            </button>
+        </div>
+    </div>
+</form>
+<th:block th:include="include :: footer"/>
+<script>
+    layui.use(['form','laydate','jquery'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let MODULE_PATH = rootPath+"/MsgTemplateController";
+		
+        form.on('submit(msgTemplate-update)', function (data) {
+            $.ajax({
+                url: MODULE_PATH+'/edit',
+                data: data.field,
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                type: 'post',
+                success: function (result) {
+                    if (result.code==200) {
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                            parent.layui.table.reload("msgTemplate-table");
+                        });
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 5000});
+                    }
+                }
+            })
+            return false;
+        });
+    })
+</script>
+<script>
+</script>
+</body>
+</html>

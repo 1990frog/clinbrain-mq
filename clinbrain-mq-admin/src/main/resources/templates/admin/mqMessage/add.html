@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增')"/>
+</head>
+<body>
+<form class="layui-form">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">消息类型， sms, email ...</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="messageGenre" autocomplete="off" placeholder="消息类型， sms, email ..." class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">消息状态，准备发送，发送失败，发送成功</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="status" autocomplete="off" placeholder="消息状态，准备发送，发送失败，发送成功" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label"> > 0 重试次数</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="retry" autocomplete="off" placeholder=" > 0 重试次数" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">延迟时间点</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="delay" autocomplete="off" placeholder="延迟时间点" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">指定人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="assignTo" autocomplete="off" placeholder="指定人" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" autocomplete="off" placeholder="标题" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">发送内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="content" autocomplete="off" placeholder="发送内容" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">引用模板</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="templateId" autocomplete="off" placeholder="引用模板" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">追踪标识</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="traceId" autocomplete="off" placeholder="追踪标识" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">原始信息</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="originalData" autocomplete="off" placeholder="原始信息" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">日志记录信息</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="log" autocomplete="off" placeholder="日志记录信息" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="createTime" autocomplete="off" placeholder="创建时间" class="layui-input datetime-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="updateTime" autocomplete="off" placeholder="修改时间" class="layui-input datetime-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">标识过期</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="expired" autocomplete="off" placeholder="标识过期" class="layui-input">
+                    </div>
+                </div>
+
+
+				<div class="layui-form-item">
+                    <label class="layui-form-label">附件列表。多个附近以||分割（双竖线）</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="attachPaths" autocomplete="off" placeholder="附件列表。多个附近以||分割（双竖线）" class="layui-input">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="mqMessage-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+<th:block th:include="include :: footer"/>
+<script>
+    layui.use(['form','laydate','jquery'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let MODULE_PATH = rootPath+"/MqMessageController";
+		var laydate = layui.laydate;
+        //同时绑定多个
+        lay('.datetime-input').each(function(){
+          laydate.render({
+            elem: this
+            ,trigger: 'click'
+            ,type: 'datetime'
+          });
+        });
+        //保存
+        form.on('submit(mqMessage-save)', function (data) {
+            $.ajax({
+                url: MODULE_PATH+'/add',
+                data: data.field,
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                type: 'post',
+                success: function (result) {
+                    if (result.code==200) {
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                            parent.layui.table.reload("mqMessage-table");
+                        });
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    }
+                }
+            })
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

@@ -100,7 +100,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     <logger name="java.sql.Statement" level="DEBUG"/>
     <logger name="java.sql.PreparedStatement" level="DEBUG"/>
 	<!-- 自己项目的 -->
-	<logger name="com.clinbrain" level="DEBUG"/>
+	<logger name="com.clinbrain.mq.mapper" level="DEBUG"/>
 
 
 	<!--
@@ -110,7 +110,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 
 
 	<!-- dev环境 -->
-	<springProfile name="dev">
+	<springProfile name="wuhan">
 	    <root level="INFO">
 			<!-- 控制台 -->
 			<appender-ref ref="console" />
@@ -125,68 +125,3 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 	    </root>
 	</springProfile>
 </configuration>
-
-
-
-
-
-
-<!--
-
-
-idea好像会报错解决方案
-
-<springProfile name="dev">
-    <root level="INFO">
-		<appender-ref ref="console" />
-    </root>
-</springProfile>
-
-   <springProfile name="prod">
-    <root level="INFO">
-        <appender-ref ref="appLogAppender"/>
-    </root>
-</springProfile>
-
-改为
-<root level="INFO">
-	<appender-ref ref="console" />
-</root>
-或者
-<root level="INFO">
-      <appender-ref ref="appLogAppender"/>
-</root>
-
-
-使用方法：
-
-1、根据自己实际项目路径修改地址
-
-<property name="LOG_HOME" value="d:\\springbootv2-log" />
-
-
-2、
-dev环境   与    生产环境  根据application.yml 里面的
-spring :
-  # 环境 dev|test|prod
-  profiles :
-    active : prod
-
-来进行配置的
-
-
-3、如果改变了的目录结构需要修改 上面的 name为自己的项目目录
-
-<logger name="com.clinbraininbrain" level="DEBUG"/>
-
-
-
-4、注意事项
-开发环境只输出到控制台
-生成环境生成log日志
-
-最后，这样一改真好!!!!!
-
-
-
- -->

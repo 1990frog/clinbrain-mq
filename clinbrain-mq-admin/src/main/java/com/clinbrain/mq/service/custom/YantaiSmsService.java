@@ -1,6 +1,7 @@
 package com.clinbrain.mq.service.custom;
 
 import com.clinbrain.mq.service.BaseSmsService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
  * Created by Liaopan on 2021-12-06.
  */
 @Service("yantaiService")
+@ConditionalOnProperty(prefix = "spring.profiles.", name = "active", havingValue = "yantai")
 public class YantaiSmsService extends BaseSmsService {
     private final static Pattern PATTERN = Pattern.compile("(\\{[x]*\\})");
     @Override

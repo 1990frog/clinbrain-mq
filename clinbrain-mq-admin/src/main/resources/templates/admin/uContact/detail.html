@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('编辑个人联系方式')"/>
+</head>
+<body>
+<div class="layui-card">
+    <input type="hidden" th:value="${contactId}" id="contactId"/>
+    <div class="layui-card-body">
+        <table id="uContact-detail-table" class="layui-table" lay-filter="uContact-detail-table" lay-data="{toolbar: '#tableToolbar',defaultToolbar:[]}">
+            <thead>
+                <tr>
+                    <th lay-data="{field:'id', width:'10%', sort: false}">ID</th>
+                    <th lay-data="{field:'contactType', width:'28%', sort: false}">联系方式</th>
+                    <th lay-data="{field:'contactValue', width:'36%', sort: false}">联系内容</th>
+                    <th lay-data="{toolbar: '#uContact-bar',width:'25%', sort: false}">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="detail : ${contacts}">
+                    <td th:text="*{detail.id}"></td>
+                    <td th:text="*{detail.contactType}"></td>
+                    <td th:text="*{detail.contactValue}"></td>
+                    <td>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/html" id="tableToolbar">
+        <button shiro:hasPermission="gen:uContact:add" class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+            <i class="layui-icon layui-icon-add-1"></i>
+            新增
+        </button>
+    </script>
+    <script type="text/html" id="uContact-bar">
+        <button shiro:hasPermission="gen:uContact:remove" class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove" title="删除"><i class="layui-icon layui-icon-delete"></i>
+        </button>
+    </script>
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    layui.use(['table', 'form', 'jquery', 'laydate'], function () {
+        let table = layui.table;
+        let $ = layui.jquery;
+        let form = layui.form;
+        let contactId = $("#contactId").val();
+        let MODULE_PATH = rootPath+"/UContactController";
+
+        table.on('toolbar(uContact-detail-table)', function (obj) {
+            if (obj.event === 'add') {
+                window.add();
+            }
+        });
+
+        table.on('tool(uContact-detail-table)', function (obj) {
+            if (obj.event === 'remove') {
+                layer.confirm('确定要删除该数据', {icon: 3, title: '提示'}, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    $.ajax({
+                        url: MODULE_PATH + "/contactDetail/" + obj.data['id'],
+                        dataType: 'json',
+                        type: 'delete',
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.code==200) {
+                                layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 1000});
+                            }
+                        }
+                    })
+                });
+            }
+        });
+
+        window.add = function () {
+            layer.open({
+                type: 1,
+                title: '新增',
+                shade: 0.1,
+                area: ['400px', '230px'],
+                btn: ["保存"],
+                yes : function(index, layero) {
+                    let loading = layer.load();
+                    var vals = form.val("contactForm");
+
+                    var postData = [vals];
+                    $.ajax({
+                        url: MODULE_PATH + "/contact/" + contactId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        type: 'post',
+                        data: JSON.stringify(postData),
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.code==200) {
+                                layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                    layer.close(index);
+                                    window.location.reload(true);
+                                });
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 5000});
+                            }
+                        }
+                    })
+                },
+                content: $("#addContent")
+            });
+        }
+    })
+</script>
+<script>
+</script>
+</body>
+
+<div class="layui-card-body" id="addContent" style="display:none">
+    <form class="layui-form" lay-filter="contactForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系方式</label>
+            <div class="layui-input-block">
+                <select name="contactType" lay-filter="contactType">
+                    <option value="sms">短信</option>
+                    <option value="email">邮件</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系内容</label>
+            <div class="layui-input-block">
+                <input type="text" name="contactValue" autocomplete="off" placeholder="联系方式内容" class="layui-input">
+                <input type="hidden" name="isDefault" value="0"/>
+                <input type="hidden" name="checkDefault" value="0"/>
+            </div>
+        </div>
+    </form>
+</div>
+</html>

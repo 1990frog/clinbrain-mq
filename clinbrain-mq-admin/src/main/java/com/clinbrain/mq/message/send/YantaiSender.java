@@ -12,6 +12,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -23,6 +25,7 @@ import java.util.Random;
  */
 @Service("yantai")
 @Slf4j
+@ConditionalOnProperty(prefix = "spring.profile", name = "active", havingValue = "yantai")
 public class YantaiSender implements ISmsSender {
 
     @Autowired

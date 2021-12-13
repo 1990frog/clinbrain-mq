@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('springboot-v2 开发平台')"/>
+    <th:block th:include="include :: header('Clinbrain')"/>
     <link rel="stylesheet" th:href="@{/static/admin/css/load.css}"/>
     <link rel="stylesheet" th:href="@{/static/admin/css/admin.css}"/>
     <!-- 主 题 更 换 -->
@@ -25,7 +25,6 @@
                 <!--<a th:href="@{/SysNoticeController/viewUser}" class="layui-icon layui-icon-notice">
                     <span class="layui-badge" th:text="${session.notices.size()}"></span>
                 </a>-->
-
 
                 <a id="menu-msg" class="layui-icon layui-icon-notice" menu-type="1" th:menu-url="@{/SysNoticeController/viewUser}" menu-id="n4" href="javascript:;">
                     <span class="layui-badge" th:text="${session.notices.size()}"></span>
