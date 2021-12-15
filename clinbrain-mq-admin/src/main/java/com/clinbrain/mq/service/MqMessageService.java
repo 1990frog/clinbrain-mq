@@ -7,6 +7,7 @@ import com.clinbrain.mq.mapper.auto.MqMessageMapper;
 import com.clinbrain.mq.model.custom.Tablepar;
 import com.clinbrain.mq.model.custom.UMqMessage;
 import com.clinbrain.mq.model.custom.UMqMessageExample;
+import com.clinbrain.mq.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,11 @@ public class MqMessageService implements BaseService<UMqMessage, UMqMessageExamp
 	        	testExample.createCriteria().andLikeQuery(UMqMessage);
 	        }
 			//表格排序
-			//if(StrUtil.isNotEmpty(tablepar.getOrderByColumn())) {
-	        //	testExample.setOrderByClause(StringUtils.toUnderScoreCase(tablepar.getOrderByColumn()) +" "+tablepar.getIsAsc());
-	        //}else{
-	        //	testExample.setOrderByClause("id ASC");
-	        //}
+			if(StrUtil.isNotEmpty(tablepar.getOrderByColumn())) {
+	        	testExample.setOrderByClause(StringUtils.toUnderScoreCase(tablepar.getOrderByColumn()) +" "+tablepar.getIsAsc());
+	        }else{
+	        	testExample.setOrderByClause("create_time DESC");
+	        }
 	        PageHelper.startPage(tablepar.getPage(), tablepar.getLimit());
 	        List<UMqMessage> list= mqMessageMapper.selectByExample(testExample);
 	        PageInfo<UMqMessage> pageInfo = new PageInfo<UMqMessage>(list);

@@ -100,7 +100,7 @@
 
                 {title: '日志', field: 'log', align: 'center'},
 
-                {title: '创建时间', field: 'createTime', align: 'center'},
+                {title: '创建时间', field: 'createTime', sortColumn:"create_time", align: 'center',sort:true},
 
                 {title: '修改时间', field: 'updateTime', align: 'center', hide: true},
 
@@ -118,6 +118,7 @@
             elem: '#mqMessage-table',
             url: MODULE_PATH + 'list',
             page: true,
+            autoSort: false,
             method: 'get',
             cols: cols,
             skin: 'line',
@@ -146,6 +147,19 @@
             } else if (obj.event === 'batchRemove') {
                 window.batchRemove(obj);
             }
+        });
+
+        table.on('sort(mqMessage-table)', function(obj){ //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            //尽管我们的 table 自带排序功能，但并没有请求服务端。
+            //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+            table.reload('mqMessage-table', {
+                initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                    orderByColumn: obj.field //排序字段
+                    ,isAsc: obj.type //排序方式
+                }
+            });
+
         });
 
         //查询按钮绑定
