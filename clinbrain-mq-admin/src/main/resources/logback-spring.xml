@@ -119,6 +119,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 	</springProfile>
 
     <root level="INFO">
+        <appender-ref ref="console" />
         <appender-ref ref="appLogAppender"/>
     </root>
 

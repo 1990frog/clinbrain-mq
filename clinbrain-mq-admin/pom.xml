@@ -10,8 +10,8 @@
     <groupId>com.clinbrain</groupId>
     <artifactId>clinbrain-mq-admin</artifactId>
 	<name>clinbrain-mq-admin</name>
-    <version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+    <version>1.0</version>
+	<packaging>jar</packaging>
     <description>clinbrain mq admin</description>
 
     <properties>

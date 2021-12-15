@@ -25,7 +25,7 @@ import java.util.Random;
  */
 @Service("yantai")
 @Slf4j
-@ConditionalOnProperty(prefix = "spring.profile", name = "active", havingValue = "yantai")
+@ConditionalOnProperty(prefix = "spring.profiles.", name = "active", havingValue = "yantai")
 public class YantaiSender implements ISmsSender {
 
     @Autowired
