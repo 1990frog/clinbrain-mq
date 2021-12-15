@@ -110,7 +110,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 
 
 	<!-- dev环境 -->
-	<springProfile name="wuhan">
+	<springProfile name="dev">
 	    <root level="INFO">
 			<!-- 控制台 -->
 			<appender-ref ref="console" />
@@ -118,10 +118,8 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
 	    </root>
 	</springProfile>
 
-	 <!-- 生产环境 -->
-    <springProfile name="prod">
-	    <root level="INFO">
-	        <appender-ref ref="appLogAppender"/>
-	    </root>
-	</springProfile>
+    <root level="INFO">
+        <appender-ref ref="appLogAppender"/>
+    </root>
+
 </configuration>
