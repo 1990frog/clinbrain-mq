@@ -71,7 +71,7 @@ spring:
   mail:
     host: smtp.qiye.163.com
     username: liaopan@clinbrain.com
-    password: n5NB565f
+    password: 123456
     #port: 587
     default-encoding: UTF-8
     # 配置SSL 加密工厂
@@ -83,6 +83,6 @@ spring:
         debug: true
 
 sms:
-  jdbcUrl: jdbc:sqlserver://192.168.0.113:1433;DataBaseName=mq
+  jdbcUrl: jdbc:sqlserver://192.168.0.36:1433;DataBaseName=db_test
   username: sa
-  password: P@ssw0rd123
+  password: P@ssw0rd

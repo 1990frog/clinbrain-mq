@@ -59,7 +59,7 @@ public class SmsSenderHandler {
             }catch (Exception e) {
                 log.error("发送短信失败", e);
                 uMqMessage.setStatus(MessageSendStatus.ERROR.getMsg());
-                uMqMessage.setContent(e.getMessage());
+                uMqMessage.setLog(e.getMessage());
             }finally {
                 saveMesageInfo(uMqMessage);
             }

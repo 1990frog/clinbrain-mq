@@ -38,7 +38,7 @@ public class WuhanSender implements ISmsSender {
         SimpleDataSource dataSource = new SimpleDataSource(wuhanProperties.getJdbcUrl(),
                 wuhanProperties.getUsername(), wuhanProperties.getPassword(), "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         try {
-            SqlExecutor.execute(dataSource.getConnection(), WuhanProperties.ADD_SQL, phoneNumber, content);
+            SqlExecutor.execute(dataSource.getConnection(), WuhanProperties.INSERT_SQL, phoneNumber, content);
         }catch (Exception e) {
             throw new SMSException("插入数据库出错: " + ExceptionUtil.getRootCauseMessage(e));
         }

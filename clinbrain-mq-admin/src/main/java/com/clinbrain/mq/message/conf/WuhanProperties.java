@@ -20,5 +20,5 @@ public class WuhanProperties {
     private String username;
     private String password;
 
-    public static final String ADD_SQL = "insert into smsdb.dbo.SendSms values(?,?,getdate(),1,null,null,0,null,null,null,null)";
+    public static final String INSERT_SQL = "insert into smsdb.dbo.SendSms values(?,?,getdate(),1,null,null,0,null,null,null,null)";
 }
