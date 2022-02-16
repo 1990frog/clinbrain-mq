@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class SmsController {
 
     @Autowired
-    private SmsServiceBeanConfig smsServiceBeanConfig;
+    private ISmsTemplateService smsService;
 
     @Autowired
     private V2Config config;
@@ -35,7 +35,6 @@ public class SmsController {
     @PostMapping("/send")
     public String send(@RequestBody SMSMessage smsMessage){
         if (null != smsMessage){
-            ISmsTemplateService smsService = smsServiceBeanConfig.createSmsService(config.getName()+"Service");
             smsService.sendSms(smsMessage);
             return "success";
         }

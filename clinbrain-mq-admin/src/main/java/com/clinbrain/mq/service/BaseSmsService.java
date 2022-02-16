@@ -60,7 +60,7 @@ public abstract class BaseSmsService implements ISmsTemplateService{
     public void sendSms(SMSMessage smsMessage){
         //手机号
         String[] assign = smsMessage.getAssign();
-        if (assign != null){
+        if (assign != null && assign.length > 0){
             log.info("指定手机号发送短信" + StrUtil.join("," ,assign));
             //查询模板
             UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
@@ -71,7 +71,8 @@ public abstract class BaseSmsService implements ISmsTemplateService{
             }
         }else {
             String[] assignId = smsMessage.getAssignId();
-            if (assignId != null){
+            if (assignId != null && assignId.length > 0){
+                log.info("指定联系人ID发送短信" + StrUtil.join("," ,assignId));
                 UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
                 if (null != template){
                     //根据 assignId 查询联系人信息
@@ -80,7 +81,8 @@ public abstract class BaseSmsService implements ISmsTemplateService{
                 }
             }else {
                 String[] assignGroup = smsMessage.getAssignGroup();
-                if (null != assignGroup){
+                log.info("指定联系组ID发送短信" + StrUtil.join("," ,assignGroup));
+                if (null != assignGroup && assignGroup.length > 0){
                     UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
                     if (null != template){
                         //根据 assignGroup 查询联系人信息
