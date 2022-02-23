@@ -112,20 +112,36 @@ public abstract class BaseSmsService implements ISmsTemplateService{
      */
     private void saveAndSendMessage(String phoneNumber,String traceId,List<String> templateParams,UMsgTemplate template){
         String originalData = template.getTemplateContent();
-        String formatContent = parseTemplate(originalData, templateParams);
         UMqMessage uMqMessage = UMqMessage.builder()
                 .traceId(StrUtil.emptyToDefault(traceId,StrUtil.uuid()))
                 .messageGenre("sms")
                 .status("准备发送")
                 .assignTo(phoneNumber)
-                .content(formatContent)
                 .originalData(originalData)
                 .templateId(template.getId())
                 .createTime(new Date())
                 .updateTime(new Date())
                 .build();
+        String formatContent = "";
+        int succeed = 0;
+        try {
+             formatContent = parseTemplate(originalData, templateParams);
+        }catch (Exception e) {
+            uMqMessage.setStatus("发送失败");
+            formatContent = e.getMessage();
+            throw  e ;
+        }finally {
+            uMqMessage.setContent(formatContent);
+            uMqMessage.setUpdateTime(new Date());
+            try {
+                succeed = uMqMessageMapper.insertSelective(uMqMessage);
+            }catch (Exception e) {
+                log.error("保存消息到数据库失败", e);
+            }
+        }
+
         //保存uMqMessage
-        if(uMqMessageMapper.insertSelective(uMqMessage) > 0) {
+        if(succeed > 0) {
             String jsonString = JSONUtil.toJsonStr(MqMessageObject.builder().phoneNumber(phoneNumber)
                     .templateCode(template.getTemplateCode())
                     .templateParams(templateParams)
@@ -133,6 +149,8 @@ public abstract class BaseSmsService implements ISmsTemplateService{
             //发送消息到MQ
             rabbitTemplate.convertAndSend(ExchangeConfig.CLINBRAIN_AMQ_SMS_DIRECT,
                     BindingsConfig.INFORM_SMS_DEFAULT, jsonString);
+        }else {
+            log.info("消息保存到数据库失败,无法发送到MQ");
         }
     }
 
