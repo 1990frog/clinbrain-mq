@@ -6,7 +6,6 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.clinbrain.mq.message.ISmsSender;
 import com.clinbrain.mq.message.SMSException;
-import com.clinbrain.mq.message.conf.PengzhouProperties;
 import com.clinbrain.mq.message.conf.ShiyanProperties;
 import com.clinbrain.mq.model.custom.MqMessageObject;
 import com.clinbrain.mq.model.custom.UMqMessage;
@@ -15,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * 彭州发送短信的方法
@@ -60,7 +57,7 @@ public class ShiyanSender implements ISmsSender {
         try {
 
             paramMap.set("mac", makeMD5(ecName+apId+secretKey+phoneNumber+msg+sign+addSerial));
-            final String smsPostBody =  HttpUtil.post(sendSmsUrl, paramMap.toString());
+            final String smsPostBody =  HttpUtil.post(sendSmsUrl, Base64.getEncoder().encodeToString(paramMap.toString().getBytes()));
             if(StrUtil.isNotEmpty(smsPostBody)) {
                 JSONObject smsResultObj = new JSONObject(smsPostBody);
                 if(!"success".equalsIgnoreCase(smsResultObj.getStr("rspcod"))) {
