@@ -77,7 +77,7 @@ spring:
         debug: true
 
 sms:
-  sendSmsUrl: https://****:****/sms/submi
+  sendSmsUrl: https://112.35.10.201:58888/sms/submit
   ecName: 十堰市人民医院(湖北医药学院附属人民医院)1
   apId: JCPTHT
   secretKey: KLbr@20220316

@@ -67,7 +67,7 @@ public class ShiyanSender implements ISmsSender {
                 throw new SMSException("获取短信平台信息出错: 系统未知错误->" + smsPostBody);
             }
         } catch (Exception e) {
-            throw new SMSException("短信发送失败: "  + ExceptionUtil.getRootCauseMessage(e));
+            throw new SMSException("发送报文："+Base64.getEncoder().encodeToString(paramMap.toString().getBytes())+"，短信发送失败: " + ExceptionUtil.getRootCauseMessage(e));
         }
 
     }
