@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  */
 @Service
 @Slf4j
-public abstract class BaseSmsService implements ISmsTemplateService{
+public abstract class BaseSmsService implements ISmsTemplateService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -54,41 +54,37 @@ public abstract class BaseSmsService implements ISmsTemplateService{
 
     /**
      * 解析SMSMessage消息格式，并将消息发送到MQ中
+     *
      * @param smsMessage
      */
     @Override
-    public void sendSms(SMSMessage smsMessage){
+    public void sendSms(SMSMessage smsMessage) {
         //手机号
         String[] assign = smsMessage.getAssign();
-        if (assign != null && assign.length > 0){
-            log.info("指定手机号发送短信" + StrUtil.join("," ,assign));
+        UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
+        if (template == null) {
+            throw new IllegalArgumentException("没有找到ID为[" + smsMessage.getTemplateId() + "]的数据模板, 请确认是否存在!");
+        }
+        if (assign != null && assign.length > 0) {
+            log.info("指定手机号发送短信" + StrUtil.join(",", assign));
             //查询模板
-            UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
-            if (null != template){
-                for (int i=0;i<assign.length;i++){
-                    saveAndSendMessage(assign[i],smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
-                }
+            for (String s : assign) {
+                saveAndSendMessage(s, smsMessage.getTraceId(), smsMessage.getTemplateParams(), template);
             }
-        }else {
+        } else {
             String[] assignId = smsMessage.getAssignId();
-            if (assignId != null && assignId.length > 0){
-                log.info("指定联系人ID发送短信" + StrUtil.join("," ,assignId));
-                UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
-                if (null != template){
-                    //根据 assignId 查询联系人信息
-                    List<ContactVo> contactList = uContactDao.getContactList(assignId);
-                    dealMessage(contactList,smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
-                }
-            }else {
+            if (assignId != null && assignId.length > 0) {
+                log.info("指定联系人ID发送短信" + StrUtil.join(",", assignId));
+                //根据 assignId 查询联系人信息
+                List<ContactVo> contactList = uContactDao.getContactList(assignId);
+                dealMessage(contactList, smsMessage.getTraceId(), smsMessage.getTemplateParams(), template);
+            } else {
                 String[] assignGroup = smsMessage.getAssignGroup();
-                log.info("指定联系组ID发送短信" + StrUtil.join("," ,assignGroup));
-                if (null != assignGroup && assignGroup.length > 0){
-                    UMsgTemplate template = getTemplate(smsMessage.getTemplateId());
-                    if (null != template){
-                        //根据 assignGroup 查询联系人信息
-                        List<ContactVo> contactList = uGroupsDao.getContactList(assignGroup);
-                        dealMessage(contactList,smsMessage.getTraceId(),smsMessage.getTemplateParams(),template);
-                    }
+                log.info("指定联系组ID发送短信" + StrUtil.join(",", assignGroup));
+                if (null != assignGroup && assignGroup.length > 0) {
+                    //根据 assignGroup 查询联系人信息
+                    List<ContactVo> contactList = uGroupsDao.getContactList(assignGroup);
+                    dealMessage(contactList, smsMessage.getTraceId(), smsMessage.getTemplateParams(), template);
                 }
             }
         }
@@ -96,24 +92,26 @@ public abstract class BaseSmsService implements ISmsTemplateService{
 
     /**
      * 处理消息
+     *
      * @param contactList
      * @param template
      */
-    private void dealMessage(List<ContactVo> contactList,String traceId,List<String> templateParams,UMsgTemplate template){
+    private void dealMessage(List<ContactVo> contactList, String traceId, List<String> templateParams, UMsgTemplate template) {
         Optional.ofNullable(contactList).ifPresent(cList -> cList.forEach(cv -> {
-            saveAndSendMessage(cv.getContactValue(),traceId,templateParams,template);
+            saveAndSendMessage(cv.getContactValue(), traceId, templateParams, template);
         }));
     }
 
     /**
      * 消息持久化，同时将消息发送到MQ中
+     *
      * @param phoneNumber 手机号
-     * @param template 模板对象
+     * @param template    模板对象
      */
-    private void saveAndSendMessage(String phoneNumber,String traceId,List<String> templateParams,UMsgTemplate template){
+    private void saveAndSendMessage(String phoneNumber, String traceId, List<String> templateParams, UMsgTemplate template) {
         String originalData = template.getTemplateContent();
         UMqMessage uMqMessage = UMqMessage.builder()
-                .traceId(StrUtil.emptyToDefault(traceId,StrUtil.uuid()))
+                .traceId(StrUtil.emptyToDefault(traceId, StrUtil.uuid()))
                 .messageGenre("sms")
                 .status("准备发送")
                 .assignTo(phoneNumber)
@@ -125,23 +123,23 @@ public abstract class BaseSmsService implements ISmsTemplateService{
         String formatContent = "";
         int succeed = 0;
         try {
-             formatContent = parseTemplate(originalData, templateParams);
-        }catch (Exception e) {
+            formatContent = parseTemplate(originalData, templateParams);
+        } catch (Exception e) {
             uMqMessage.setStatus("发送失败");
             formatContent = e.getMessage();
-            throw  e ;
-        }finally {
+            throw e;
+        } finally {
             uMqMessage.setContent(formatContent);
             uMqMessage.setUpdateTime(new Date());
             try {
                 succeed = uMqMessageMapper.insertSelective(uMqMessage);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 log.error("保存消息到数据库失败", e);
             }
         }
 
         //保存uMqMessage
-        if(succeed > 0) {
+        if (succeed > 0) {
             String jsonString = JSONUtil.toJsonStr(MqMessageObject.builder().phoneNumber(phoneNumber)
                     .templateCode(template.getTemplateCode())
                     .templateParams(templateParams)
@@ -149,23 +147,24 @@ public abstract class BaseSmsService implements ISmsTemplateService{
             //发送消息到MQ
             rabbitTemplate.convertAndSend(ExchangeConfig.CLINBRAIN_AMQ_SMS_DIRECT,
                     BindingsConfig.INFORM_SMS_DEFAULT, jsonString);
-        }else {
+        } else {
             log.info("消息保存到数据库失败,无法发送到MQ");
         }
     }
 
     /**
      * 根据参数templateId获取templateCode和templateParams
+     *
      * @param smsTemplateId
      * @return
      */
-    public UMsgTemplate getTemplate(Long smsTemplateId){
-        log.info("获取指定ID[ "+smsTemplateId+" ]的模板内容");
-        if(smsTemplateId == null) {
-            log.error("获取指定ID[ "+smsTemplateId+" ]的模板内容为空");
+    public UMsgTemplate getTemplate(Long smsTemplateId) {
+        log.info("获取指定ID[ " + smsTemplateId + " ]的模板内容");
+        if (smsTemplateId == null) {
+            log.error("获取指定ID[ " + smsTemplateId + " ]的模板内容为空");
             return null;
         }
-        return uMsgTemplateDao.getTemplate(smsTemplateId,"sms");
+        return uMsgTemplateDao.getTemplate(smsTemplateId, "sms");
     }
 
     protected abstract String parseTemplate(String templateContent, List<String> templateParams);
