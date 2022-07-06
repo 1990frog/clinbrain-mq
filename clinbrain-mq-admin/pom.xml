@@ -5,11 +5,11 @@
 	<parent>
 		<artifactId>clinbrain-mq</artifactId>
 		<groupId>com.clinbrain</groupId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.8</version>
 	</parent>
     <artifactId>clinbrain-mq-admin</artifactId>
 	<name>clinbrain-mq-admin</name>
-    <version>1.0</version>
+    <version>1.8</version>
 	<packaging>jar</packaging>
     <description>clinbrain mq admin</description>
 
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
+            <version>1.2.83</version>
         </dependency>
 		<!-- pageHelper -->
 		<dependency>
@@ -211,12 +211,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 			<version>1.18.22</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.clinbrain</groupId>
-			<artifactId>clinbrain-mq-common</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
         <dependency>
