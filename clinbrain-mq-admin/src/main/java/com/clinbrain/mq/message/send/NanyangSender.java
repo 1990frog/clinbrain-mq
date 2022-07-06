@@ -45,6 +45,8 @@ public class NanyangSender implements ISmsSender {
         JSONObject paramMap = new JSONObject();
         final long time = System.currentTimeMillis();
         final Long smsId = uMqMessage.getId();
+        final String authCode = nanyangProperties.getAuthCode();
+        final String spId = nanyangProperties.getSpId();
         String content = "";
         try {
             content = URLEncoder.encode(uMqMessage.getContent(), "UTF-8");
@@ -52,15 +54,15 @@ public class NanyangSender implements ISmsSender {
             throw new SMSException("短信内容重编码失败: " + ExceptionUtil.getRootCauseMessage(e));
         }
 
-        paramMap.set("auth_code", nanyangProperties.getAuthCode());
-        paramMap.set("spid", nanyangProperties.getSpId()); // 输出参数
-        paramMap.set("smsid", smsId);
+        paramMap.set("auth_code", authCode);
+        paramMap.set("spid", spId); // 输出参数
+        paramMap.set("smsid", smsId+"");
         paramMap.set("mobiles", phoneNumber);
         paramMap.set("sendtime", "");
-        paramMap.set("timestamp", time);
+        paramMap.set("timestamp", time+"");
         paramMap.set("content", content);
         try {
-            paramMap.set("sign", SHA1(nanyangProperties.getAuthCode()+nanyangProperties.getSpId()+nanyangProperties.getExtport()
+            paramMap.set("sign", SHA1(authCode + spId + nanyangProperties.getExtport()
             +smsId+phoneNumber+""+content+time+nanyangProperties.getAuthKey()));
             final String postBody = HttpUtil.createPost(nanyangProperties.getApiUrl())
                     .header("X-APP-ID", nanyangProperties.getXAppID())
