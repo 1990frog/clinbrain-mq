@@ -26,4 +26,61 @@
 		<spring-boot.version>2.4.1</spring-boot.version>
 	</properties>
 
+    <profiles>
+        <profile>
+            <id>yantai</id>
+            <properties>
+                <activatedYml>yantai</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>wuhan</id>
+            <properties>
+                <activatedYml>wuhan</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>shiyan</id>
+            <properties>
+                <activatedYml>shiyan</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>pengzhou</id>
+            <properties>
+                <activatedYml>pengzhou</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>nanyang</id>
+            <properties>
+                <activatedYml>nanyang</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>linshu</id>
+            <properties>
+                <activatedYml>linshu</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>foshan11</id>
+            <properties>
+                <activatedYml>foshan11</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>deyang</id>
+            <properties>
+                <activatedYml>deyang</activatedYml>
+            </properties>
+        </profile>
+        <profile>
+            <id>hebei2</id>
+            <properties>
+                <activatedYml>hebei2</activatedYml>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

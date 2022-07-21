@@ -2,18 +2,16 @@ package com.clinbrain.mq.message.send;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
-import com.clinbrain.mq.message.conf.YanTaiProperties;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
 import com.clinbrain.mq.message.ISmsSender;
 import com.clinbrain.mq.message.SMSException;
+import com.clinbrain.mq.message.conf.YanTaiProperties;
 import com.clinbrain.mq.model.custom.MqMessageObject;
 import com.clinbrain.mq.model.custom.UMqMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -25,7 +23,7 @@ import java.util.Random;
  */
 @Service("yantai")
 @Slf4j
-@ConditionalOnProperty(prefix = "spring.profiles.", name = "active", havingValue = "yantai")
+@Profile("yantai")
 public class YantaiSender implements ISmsSender {
 
     @Autowired
@@ -54,20 +52,17 @@ public class YantaiSender implements ISmsSender {
             uuid = yanTaiProperties.getSpCode() + timestamp + random;
         }
         try{
-            HttpClient httpclient = new HttpClient();
-            PostMethod post = new PostMethod(requestUrl);
-            post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-            post.addParameter("SpCode", yanTaiProperties.getSpCode());
-            post.addParameter("LoginName", yanTaiProperties.getLoginName());
-            post.addParameter("Password", yanTaiProperties.getPassword());
-            post.addParameter("MessageContent", content);
-            post.addParameter("UserNumber", phoneNumbers);
-            post.addParameter("SerialNumber", uuid);
-            post.addParameter("ScheduleTime", "");
-            post.addParameter("ExtendAccessNum", "");
-            post.addParameter("f", yanTaiProperties.getF());
-            httpclient.executeMethod(post);
-            String info = new String(post.getResponseBody(),"gbk");
+            JSONObject post = new JSONObject();
+            post.set("SpCode", yanTaiProperties.getSpCode());
+            post.set("LoginName", yanTaiProperties.getLoginName());
+            post.set("Password", yanTaiProperties.getPassword());
+            post.set("MessageContent", content);
+            post.set("UserNumber", phoneNumbers);
+            post.set("SerialNumber", uuid);
+            post.set("ScheduleTime", "");
+            post.set("ExtendAccessNum", "");
+            post.set("f", yanTaiProperties.getF());
+            String info = HttpUtil.post(requestUrl, post.toStringPretty());
             if(StrUtil.isNotEmpty(info)){
                 String[] resp = info.split("&");
                 String code = null,desc = null;
