@@ -54,16 +54,20 @@ public class EmailHandler {
         uMqMessages.forEach(messageItem ->{
             EmailSendEntity entity = new EmailSendEntity();
             entity.setFrom(username);
-            entity.setTo(Arrays.asList("hexun@clinbrain.com"));
-            entity.setTitle("附件测试标题");
+            entity.setTo(Arrays.asList(messageItem.getAssignTo()));
+            entity.setTitle(messageItem.getTitle());
+            entity.setContent(messageItem.getContent());
+//            entity.setTo(Arrays.asList("hexun@clinbrain.com"));
+//            entity.setTitle("附件测试标题");
             try{
-                String resp;
-                if(StrUtil.isBlank(messageItem.getAttachPaths())){
-                    emailHandUtil.sendMixedEmail(entity, Optional.empty());
-                }else{
-                    List<String> paths = Arrays.asList(messageItem.getAttachPaths().split("\\|\\|"));
-                    emailHandUtil.sendMixedEmail(entity,Optional.ofNullable(paths));
-                }
+                emailHandUtil.sendSimpleEmail(entity);
+//                String resp;
+//                if(StrUtil.isBlank(messageItem.getAttachPaths())){
+//                    emailHandUtil.sendMixedEmail(entity, Optional.empty());
+//                }else{
+//                    List<String> paths = Arrays.asList(messageItem.getAttachPaths().split("\\|\\|"));
+//                    emailHandUtil.sendMixedEmail(entity,Optional.ofNullable(paths));
+//                }
 
                 messageItem.setLog("邮件发送成功");
                 messageItem.setUpdateTime(new Date());

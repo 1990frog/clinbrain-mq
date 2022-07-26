@@ -55,10 +55,10 @@ spring:
           multi-statement-allow: true
   # rabbitmq
   rabbitmq:
-    host: 192.168.0.115
+    host: 192.168.0.149
     port: 5672
-    username: clinbrain
-    password: clinbrain
+    username: admin
+    password: admin
     virtualHost: /
     # 消费端开启消息确认
     listener:
@@ -70,18 +70,25 @@ spring:
   # 邮件服务器信息
   mail:
     host: smtp.qiye.163.com
-    username: liaopan@clinbrain.com
-    password: 123456
-    #port: 587
+    username: guowenwen@clinbrain.com
+    password: nVZeBU5wZ2hA6kCZ
+    port: 465
     default-encoding: UTF-8
     # 配置SSL 加密工厂
     properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        connectiontimeout: 10000
+        timeout: 10000
+        writetimeout: 10000
       mail:
         smtp:
           socketFactoryClass: javax.net.ssl.SSLSocketFactory
-        #开启 DEBUG 模式
+          ssl:
+            enable: true
         debug: true
-
 sms:
   jdbcUrl: jdbc:sqlserver://192.168.0.36:1433;DataBaseName=db_test
   username: sa
