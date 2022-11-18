@@ -37,7 +37,7 @@ spring :
   # 环境 dev|test|prod
   profiles :
     active : @activatedYml@
-#    active: wuhan
+#    active: wenzhou2
     #引入其他配置文件，例如ftpHX 未配置文件application-ftpHX.yml
     #include: ftpHX,ftpCloud
   servlet:

@@ -81,6 +81,12 @@
                 <activatedYml>hebei2</activatedYml>
             </properties>
         </profile>
+        <profile>
+            <id>wenzhou2</id>
+            <properties>
+                <activatedYml>wenzhou2</activatedYml>
+            </properties>
+        </profile>
     </profiles>
 
 </project>
