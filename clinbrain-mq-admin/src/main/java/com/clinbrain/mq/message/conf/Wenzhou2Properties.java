@@ -21,5 +21,6 @@ public class Wenzhou2Properties {
     private String company;
     private String token;
     private String mbid;
+    private String qzdx;
 
 }
