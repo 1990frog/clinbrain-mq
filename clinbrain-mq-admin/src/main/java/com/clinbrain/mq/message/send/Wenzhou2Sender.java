@@ -41,7 +41,7 @@ public class Wenzhou2Sender implements ISmsSender {
         String classV = wenzhou2Properties.getClassV();
         String token = wenzhou2Properties.getToken();
         String mbid = wenzhou2Properties.getMbid();
-        String azdx = wenzhou2Properties.getQzdx();
+        String qzdx = wenzhou2Properties.getQzdx();
 
 
         String phoneNumber = mqMessageObject.getPhoneNumber();
@@ -57,7 +57,7 @@ public class Wenzhou2Sender implements ISmsSender {
         inputMap.set("MBID",mbid);
         inputMap.set("MBCS",msg);
         inputMap.set("LXDH",phoneNumber);
-        inputMap.set("QZDX",azdx);
+        inputMap.set("QZDX",qzdx);
 
         inputMap.set("YGDM","");
         String inputStr = inputMap.toString();
